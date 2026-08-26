@@ -1,32 +1,45 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#0a0a0a" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#020617" />
     
-    <!-- SEO Meta Tags -->
-    <title>Synth Labs Studio | AI Tools & Web Development</title>
-    <meta name="description" content="Explore fast browser-based AI prompt tools, SEO SERP previewers, viral hook generators, and affordable web development services by Synth Labs." />
-    <meta name="keywords" content="AI tools, prompt generator, SERP preview, SEO tools, web development, synth budget, synth labs" />
-    <meta name="author" content="Synth Labs Studio" />
+    <!-- Primary Meta Tags -->
+    <title>SynthLabs Studio - Modern Developer & Audio Engineering Suite</title>
+    <meta name="title" content="SynthLabs Studio - Modern Developer & Audio Engineering Suite" />
+    <meta name="description" content="All-in-one suite featuring client-side audio visualizers, AI prompt tools, SEO previewers, regex validators, CSS generators, and cloud cost estimators." />
+    <meta name="keywords" content="developer tools, AI prompt tools, SEO tools, synth budget, synth labs, web audio api" />
+    <meta name="author" content="SynthLabs Studio" />
+    <meta name="robots" content="index, follow" />
 
-    <!-- OpenGraph Social Meta -->
-    <meta property="og:title" content="Synth Labs Studio | AI Tools & Digital Growth" />
-    <meta property="og:description" content="Practical browser utilities and high-performance web development." />
-    <meta property="og:url" content="https://synthlabsstudio.com" />
+    <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://synthlabsstudio.com/" />
+    <meta property="og:title" content="SynthLabs Studio - Modern Developer & Audio Engineering Suite" />
+    <meta property="og:description" content="All-in-one suite featuring client-side audio visualizers, AI prompt tools, SEO previewers, and cloud cost estimators." />
+    <meta property="og:image" content="https://synthlabsstudio.com/og-image.png" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content="https://synthlabsstudio.com/" />
+    <meta property="twitter:title" content="SynthLabs Studio - Modern Developer & Audio Engineering Suite" />
+    <meta property="twitter:description" content="All-in-one suite featuring client-side audio visualizers, AI prompt tools, SEO previewers, and cloud cost estimators." />
+    <meta property="twitter:image" content="https://synthlabsstudio.com/og-image.png" />
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
 
-    <!-- Tailwind Play CDN -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google AdSense Publisher Script -->
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1977221519753961" crossorigin="anonymous"></script>
 
+    <!-- Prevent DOMException telemetry noise -->
     <script>
-      // Prevent DOMException telemetry crashes
       window.addEventListener("error", function(e) {
         if (e.error instanceof DOMException && e.error.name === "DataCloneError" && e.message && e.message.includes("PerformanceServerTiming")) {
           e.stopImmediatePropagation();
@@ -35,8 +48,9 @@
       }, true);
     </script>
   </head>
-  <body class="bg-neutral-950 text-neutral-100 antialiased font-sans selection:bg-emerald-500 selection:text-black">
-    <noscript>You need to enable JavaScript to run Synth Labs Studio.</noscript>
+  <body class="bg-slate-950 text-slate-100 antialiased min-h-screen selection:bg-cyan-500 selection:text-slate-950">
+    <noscript>You need to enable JavaScript to run SynthLabs Studio.</noscript>
     <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
