@@ -1,36 +1,24 @@
 import React, { useState } from 'react';
 import { 
   Sparkles, 
-  Search, 
-  Share2, 
   BarChart3, 
-  ShieldCheck, 
   Smartphone, 
   ArrowRight, 
   Check, 
   Copy, 
   Layers, 
   Zap, 
-  ExternalLink,
-  Code2,
-  Lock,
-  ChevronRight,
-  Menu,
-  X,
-  CreditCard,
-  FileText,
-  HelpCircle,
-  Mail,
-  Send,
-  CheckCircle2,
-  Cpu,
-  BookOpen,
-  Sliders,
-  DollarSign
+  Code2, 
+  ChevronRight, 
+  Menu, 
+  X, 
+  BookOpen, 
+  Send, 
+  CheckCircle2 
 } from 'lucide-react';
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState('tools'); // 'tools', 'posts', 'services', 'synthbudget', 'pricing', 'about', 'privacy', 'terms', 'contact'
+  const [activeTab, setActiveTab] = useState('tools'); 
   const [activeTool, setActiveTool] = useState('prompt');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [copiedState, setCopiedState] = useState('');
@@ -58,13 +46,13 @@ export default function App() {
   // Tool 4: Keyword Density Counter
   const [densityText, setDensityText] = useState('Synth Labs Studio provides fast digital tools, SEO snippet previewers, and prompt engineering utilities. Our goal is to make web optimization simple and accessible.');
 
-  // Tool 5: JSON Schema & Meta Tag Generator
+  // Tool 5: JSON Schema Generator
   const [schemaName, setSchemaName] = useState('Synth Labs Studio');
   const [schemaUrl, setSchemaUrl] = useState('https://synthlabsstudio.com');
   const [schemaDesc, setSchemaDesc] = useState('Precision web tools and modern frontend engineering.');
   const [schemaType, setSchemaType] = useState('Organization');
 
-  // Tool 6: Budget & Ad ROI Estimator
+  // Tool 6: ROI Estimator
   const [monthlyTraffic, setMonthlyTraffic] = useState(10000);
   const [estimatedCpm, setEstimatedCpm] = useState(2.5);
   const [appSubscribers, setAppSubscribers] = useState(25);
@@ -75,7 +63,6 @@ export default function App() {
   const [contactMsg, setContactMsg] = useState('');
   const [contactSuccess, setContactSuccess] = useState(false);
 
-  // Helper Functions
   const getWordStats = (text) => {
     const clean = text.toLowerCase().replace(/[^a-zA-Z0-9\s]/g, '');
     const words = clean.split(/\s+/).filter(w => w.length > 2);
@@ -139,9 +126,8 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-neutral-950 text-neutral-100 font-sans antialiased selection:bg-emerald-500 selection:text-black flex flex-col justify-between">
-      
-      {/* Top Banner Notice */}
       <div>
+        {/* Banner */}
         <div className="bg-neutral-900/90 border-b border-neutral-800 text-xs text-neutral-400 py-2 px-4 text-center">
           <span className="inline-flex items-center gap-2">
             <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse"></span>
@@ -149,7 +135,7 @@ export default function App() {
           </span>
         </div>
 
-        {/* Navigation Header */}
+        {/* Header */}
         <header className="sticky top-0 z-40 backdrop-blur-md bg-neutral-950/90 border-b border-neutral-800/80">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
             <div 
@@ -165,7 +151,6 @@ export default function App() {
               </div>
             </div>
 
-            {/* Desktop Navigation */}
             <nav className="hidden lg:flex items-center gap-1 bg-neutral-900/70 p-1 rounded-xl border border-neutral-800">
               <button
                 onClick={() => setActiveTab('tools')}
@@ -218,7 +203,6 @@ export default function App() {
               </button>
             </div>
 
-            {/* Mobile Menu Toggle */}
             <button 
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="lg:hidden p-2 rounded-lg text-neutral-400 hover:text-white hover:bg-neutral-900 border border-neutral-800"
@@ -227,7 +211,6 @@ export default function App() {
             </button>
           </div>
 
-          {/* Mobile Navigation Drawer */}
           {mobileMenuOpen && (
             <div className="lg:hidden border-b border-neutral-800 bg-neutral-950 px-4 py-4 space-y-1.5">
               <button
@@ -270,11 +253,11 @@ export default function App() {
           )}
         </header>
 
-        {/* AdSense Native Responsive Banner Placeholder */}
+        {/* Ad Unit Placeholder */}
         <div className="max-w-5xl mx-auto px-4 pt-4">
           <div className="w-full py-3 px-4 bg-neutral-900/40 border border-neutral-800/80 rounded-xl flex items-center justify-between text-xs text-neutral-500">
             <span className="text-[10px] uppercase font-bold tracking-widest text-neutral-500">Ad Placement</span>
-            <span className="text-neutral-400 font-mono text-[11px]">Google AdSense Responsive Unit (728x90 / 320x50)</span>
+            <span className="text-neutral-400 font-mono text-[11px]">Google AdSense Responsive Unit</span>
             <span className="text-[10px] text-neutral-600">synthlabsstudio.com</span>
           </div>
         </div>
@@ -286,7 +269,7 @@ export default function App() {
               <Sparkles className="w-3.5 h-3.5" /> Next-Gen AI & SEO Toolkit
             </div>
             
-            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight sm:leading-none text-white">
+            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight text-white">
               Precision AI Tools <span className="text-emerald-400">•</span> Web Engineering <span className="text-cyan-400">•</span> Growth
             </h1>
 
@@ -311,7 +294,7 @@ export default function App() {
           </div>
         </section>
 
-        {/* TAB CONTENTS */}
+        {/* Main Content */}
         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
           
           {/* TAB 1: TOOLS SUITE */}
@@ -327,68 +310,28 @@ export default function App() {
                   </p>
                 </div>
 
-                {/* Sub-tools Tab Bar */}
                 <div className="flex flex-wrap gap-1.5 bg-neutral-900 p-1.5 rounded-xl border border-neutral-800">
-                  <button
-                    onClick={() => setActiveTool('prompt')}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-                      activeTool === 'prompt' ? 'bg-emerald-400 text-neutral-950' : 'text-neutral-400 hover:text-white'
-                    }`}
-                  >
-                    Prompt Architect
-                  </button>
-                  <button
-                    onClick={() => setActiveTool('serp')}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-                      activeTool === 'serp' ? 'bg-emerald-400 text-neutral-950' : 'text-neutral-400 hover:text-white'
-                    }`}
-                  >
-                    SERP Previewer
-                  </button>
-                  <button
-                    onClick={() => setActiveTool('hooks')}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-                      activeTool === 'hooks' ? 'bg-emerald-400 text-neutral-950' : 'text-neutral-400 hover:text-white'
-                    }`}
-                  >
-                    Social Hooks
-                  </button>
-                  <button
-                    onClick={() => setActiveTool('density')}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-                      activeTool === 'density' ? 'bg-emerald-400 text-neutral-950' : 'text-neutral-400 hover:text-white'
-                    }`}
-                  >
-                    Keyword Density
-                  </button>
-                  <button
-                    onClick={() => setActiveTool('schema')}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-                      activeTool === 'schema' ? 'bg-emerald-400 text-neutral-950' : 'text-neutral-400 hover:text-white'
-                    }`}
-                  >
-                    Schema Generator
-                  </button>
-                  <button
-                    onClick={() => setActiveTool('estimator')}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
-                      activeTool === 'estimator' ? 'bg-emerald-400 text-neutral-950' : 'text-neutral-400 hover:text-white'
-                    }`}
-                  >
-                    ROI Calculator
-                  </button>
+                  {['prompt', 'serp', 'hooks', 'density', 'schema', 'estimator'].map((t) => (
+                    <button
+                      key={t}
+                      onClick={() => setActiveTool(t)}
+                      className={`px-3 py-1.5 rounded-lg text-xs font-semibold capitalize transition-all ${
+                        activeTool === t ? 'bg-emerald-400 text-neutral-950' : 'text-neutral-400 hover:text-white'
+                      }`}
+                    >
+                      {t === 'prompt' ? 'Prompt Architect' : t === 'serp' ? 'SERP Previewer' : t === 'hooks' ? 'Social Hooks' : t === 'density' ? 'Keyword Density' : t === 'schema' ? 'Schema Generator' : 'ROI Calculator'}
+                    </button>
+                  ))}
                 </div>
               </div>
 
-              {/* TOOL 1: PROMPT ARCHITECT */}
+              {/* Tool 1 */}
               {activeTool === 'prompt' && (
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
                   <div className="bg-neutral-900/60 border border-neutral-800 rounded-2xl p-6 space-y-4">
                     <h3 className="text-base font-bold text-white flex items-center justify-between">
                       <span>System Prompt Architect</span>
-                      <span className="text-[10px] bg-emerald-950 text-emerald-400 border border-emerald-800 px-2 py-0.5 rounded">
-                        Multi-LLM
-                      </span>
+                      <span className="text-[10px] bg-emerald-950 text-emerald-400 border border-emerald-800 px-2 py-0.5 rounded">Multi-LLM</span>
                     </h3>
 
                     <div>
@@ -464,7 +407,7 @@ Guidelines:
                 </div>
               )}
 
-              {/* TOOL 2: SERP PREVIEWER */}
+              {/* Tool 2 */}
               {activeTool === 'serp' && (
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
                   <div className="bg-neutral-900/60 border border-neutral-800 rounded-2xl p-6 space-y-4">
@@ -473,7 +416,7 @@ Guidelines:
                     <div>
                       <div className="flex justify-between text-xs mb-1">
                         <span className="text-neutral-400 font-semibold">Title Tag</span>
-                        <span className={`${metaTitle.length > 60 ? 'text-amber-400' : 'text-neutral-500'}`}>
+                        <span className={metaTitle.length > 60 ? 'text-amber-400' : 'text-neutral-500'}>
                           {metaTitle.length}/60 chars
                         </span>
                       </div>
@@ -501,7 +444,7 @@ Guidelines:
                     <div>
                       <div className="flex justify-between text-xs mb-1">
                         <span className="text-neutral-400 font-semibold">Meta Description</span>
-                        <span className={`${metaDesc.length > 160 ? 'text-amber-400' : 'text-neutral-500'}`}>
+                        <span className={metaDesc.length > 160 ? 'text-amber-400' : 'text-neutral-500'}>
                           {metaDesc.length}/160 chars
                         </span>
                       </div>
@@ -533,7 +476,7 @@ Guidelines:
                 </div>
               )}
 
-              {/* TOOL 3: VIRAL HOOKS */}
+              {/* Tool 3 */}
               {activeTool === 'hooks' && (
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
                   <div className="bg-neutral-900/60 border border-neutral-800 rounded-2xl p-6 space-y-4">
@@ -575,7 +518,6 @@ Guidelines:
                         <button
                           onClick={() => handleCopy(h, `hook-${i}`)}
                           className="text-neutral-500 hover:text-emerald-400 shrink-0 p-1"
-                          title="Copy Hook"
                         >
                           {copiedState === `hook-${i}` ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
                         </button>
@@ -585,7 +527,7 @@ Guidelines:
                 </div>
               )}
 
-              {/* TOOL 4: KEYWORD DENSITY */}
+              {/* Tool 4 */}
               {activeTool === 'density' && (
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
                   <div className="bg-neutral-900/60 border border-neutral-800 rounded-2xl p-6 space-y-4">
@@ -620,7 +562,7 @@ Guidelines:
                 </div>
               )}
 
-              {/* TOOL 5: JSON SCHEMA GENERATOR */}
+              {/* Tool 5 */}
               {activeTool === 'schema' && (
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
                   <div className="bg-neutral-900/60 border border-neutral-800 rounded-2xl p-6 space-y-4">
@@ -698,7 +640,7 @@ ${JSON.stringify({
                 </div>
               )}
 
-              {/* TOOL 6: ESTIMATOR */}
+              {/* Tool 6 */}
               {activeTool === 'estimator' && (
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start">
                   <div className="bg-neutral-900/60 border border-neutral-800 rounded-2xl p-6 space-y-4">
@@ -735,7 +677,7 @@ ${JSON.stringify({
                     </div>
                     <div>
                       <div className="flex justify-between text-xs mb-1">
-                        <span className="text-neutral-400">SynthBudget App Pro Users ($4.99/mo):</span>
+                        <span className="text-neutral-400">SynthBudget Pro Users ($4.99/mo):</span>
                         <span className="font-mono text-emerald-400 font-bold">{appSubscribers} users</span>
                       </div>
                       <input
@@ -779,14 +721,12 @@ ${JSON.stringify({
             </div>
           )}
 
-          {/* TAB 2: GUIDES & ARTICLES */}
+          {/* TAB 2: ARTICLES */}
           {activeTab === 'posts' && (
             <div className="space-y-6 max-w-4xl mx-auto">
               <div>
                 <h2 className="text-2xl font-bold text-white">Articles & Optimization Guides</h2>
-                <p className="text-xs text-neutral-400 mt-1">
-                  Helpful documentation on structured prompt architecture, web performance, and monetization.
-                </p>
+                <p className="text-xs text-neutral-400 mt-1">Helpful documentation on prompt architecture and monetization.</p>
               </div>
 
               <div className="space-y-4">
@@ -794,30 +734,22 @@ ${JSON.stringify({
                   <span className="text-[10px] font-mono text-emerald-400 uppercase tracking-wider bg-emerald-950/80 px-2.5 py-0.5 rounded border border-emerald-800/50">Prompt Engineering</span>
                   <h3 className="text-lg font-bold text-white">How System Constraints Prevent LLM Hallucinations</h3>
                   <p className="text-xs text-neutral-400 leading-relaxed">
-                    By explicitly defining persona, strict task boundaries, and required output formatting (such as bullet points or markdown tables), you can increase reasoning reliability and eliminate unstructured filler answers across Claude, GPT-4, and Gemini models.
+                    By explicitly defining persona, strict task boundaries, and required output formatting, you increase reasoning reliability across AI models.
                   </p>
                 </article>
 
                 <article className="bg-neutral-900/60 border border-neutral-800 rounded-2xl p-6 space-y-2">
                   <span className="text-[10px] font-mono text-cyan-400 uppercase tracking-wider bg-cyan-950/80 px-2.5 py-0.5 rounded border border-cyan-800/50">Technical SEO</span>
-                  <h3 className="text-lg font-bold text-white">Mastering Core Web Vitals for React & Vite Applications</h3>
+                  <h3 className="text-lg font-bold text-white">Mastering Core Web Vitals for React Applications</h3>
                   <p className="text-xs text-neutral-400 leading-relaxed">
-                    Client-side rendering often suffers from Cumulative Layout Shift (CLS) and slow Largest Contentful Paint (LCP). Optimizing font displays with preconnect headers and utilizing zero-dependency CSS utilities helps guarantee sub-second load times on mobile devices.
-                  </p>
-                </article>
-
-                <article className="bg-neutral-900/60 border border-neutral-800 rounded-2xl p-6 space-y-2">
-                  <span className="text-[10px] font-mono text-indigo-400 uppercase tracking-wider bg-indigo-950/80 px-2.5 py-0.5 rounded border border-indigo-800/50">Monetization Strategy</span>
-                  <h3 className="text-lg font-bold text-white">The Hybrid Monetization Strategy: AdSense + AdMob + Micro-SaaS</h3>
-                  <p className="text-xs text-neutral-400 leading-relaxed">
-                    Why choosing one revenue stream limits growth. By combining traffic-driven web utility ads with mobile app in-app subscriptions and practical agency retainers, creators build resilient, multi-tiered digital businesses.
+                    Optimizing font displays with preconnect headers and utilizing zero-dependency CSS utilities helps guarantee sub-second load times.
                   </p>
                 </article>
               </div>
             </div>
           )}
 
-          {/* TAB 3: SYNTHBUDGET APP */}
+          {/* TAB 3: APP */}
           {activeTab === 'synthbudget' && (
             <div className="bg-neutral-900/40 border border-neutral-800 rounded-3xl p-8 lg:p-12 space-y-8 max-w-4xl mx-auto">
               <div className="space-y-3">
@@ -826,99 +758,66 @@ ${JSON.stringify({
                 </span>
                 <h2 className="text-3xl font-extrabold text-white">SynthBudget Mobile App</h2>
                 <p className="text-xs sm:text-sm text-neutral-400 leading-relaxed">
-                  Personal expense tracker, automated categorization, and cashflow forecast tool engineered for privacy and quick offline entry.
+                  Personal expense tracker, automated categorization, and cashflow forecast tool engineered for quick offline entry.
                 </p>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
                 <div className="space-y-3">
                   <div className="flex items-center gap-3 text-xs text-neutral-300">
-                    <Check className="w-4 h-4 text-emerald-400" /> Multi-account budget allocations & savings goals
+                    <Check className="w-4 h-4 text-emerald-400" /> Multi-account budget allocations
                   </div>
                   <div className="flex items-center gap-3 text-xs text-neutral-300">
-                    <Check className="w-4 h-4 text-emerald-400" /> Automated cashflow breakdown and predictive analytics
+                    <Check className="w-4 h-4 text-emerald-400" /> Automated cashflow breakdown
                   </div>
                   <div className="flex items-center gap-3 text-xs text-neutral-300">
                     <Check className="w-4 h-4 text-emerald-400" /> Optional ad-free subscription ($4.99/mo)
-                  </div>
-                  <div className="pt-2">
-                    <button 
-                      onClick={() => setActiveTab('pricing')}
-                      className="bg-emerald-400 hover:bg-emerald-300 text-neutral-950 px-5 py-2.5 rounded-xl font-bold text-xs transition-all shadow-sm"
-                    >
-                      View Pro App Pricing
-                    </button>
                   </div>
                 </div>
 
                 <div className="bg-neutral-950 border border-neutral-800 rounded-2xl p-6 text-center space-y-2">
                   <div className="text-3xl">📱</div>
                   <h4 className="text-sm font-bold text-white">Google Play Store Testing</h4>
-                  <p className="text-xs text-neutral-400">
-                    Undergoing mandatory closed tester reviews. Production public build will link here upon store release.
-                  </p>
-                  <div className="inline-block text-[11px] font-mono text-emerald-400 bg-emerald-950/80 px-3 py-1 rounded-full border border-emerald-800/60 mt-1">
-                    v1.0.0-rc ready
-                  </div>
+                  <p className="text-xs text-neutral-400">Undergoing closed tester reviews. Public build will link here upon store release.</p>
                 </div>
               </div>
             </div>
           )}
 
-          {/* TAB 4: ACCESSIBLE AFFORDABLE SERVICES */}
+          {/* TAB 4: SERVICES */}
           {activeTab === 'services' && (
             <div className="space-y-6 max-w-4xl mx-auto">
               <div>
                 <h2 className="text-2xl font-bold text-white">Accessible Micro-Services</h2>
-                <p className="text-xs text-neutral-400 mt-1">
-                  Budget-friendly engineering, SEO setups, and domain troubleshooting for independent creators and small businesses.
-                </p>
+                <p className="text-xs text-neutral-400 mt-1">Budget-friendly engineering and SEO setups.</p>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
                 <div className="bg-neutral-900/60 border border-neutral-800 rounded-2xl p-6 space-y-3 flex flex-col justify-between">
                   <div className="space-y-2">
-                    <div className="w-8 h-8 rounded-lg bg-emerald-950 border border-emerald-800 flex items-center justify-center text-emerald-400 font-bold text-xs">
-                      $49
-                    </div>
+                    <div className="w-8 h-8 rounded-lg bg-emerald-950 border border-emerald-800 flex items-center justify-center text-emerald-400 font-bold text-xs">$49</div>
                     <h3 className="text-base font-bold text-white">DNS & Domain Setup</h3>
-                    <p className="text-xs text-neutral-400 leading-relaxed">
-                      Complete custom domain linking, SSL verification, Vercel/GitHub integration, and Namecheap DNS configuration.
-                    </p>
+                    <p className="text-xs text-neutral-400 leading-relaxed">Custom domain linking, SSL verification, and Namecheap DNS configuration.</p>
                   </div>
-                  <button onClick={() => setActiveTab('contact')} className="w-full py-2 rounded-xl bg-neutral-800 hover:bg-neutral-700 text-xs font-semibold text-white border border-neutral-700">
-                    Request Setup
-                  </button>
+                  <button onClick={() => setActiveTab('contact')} className="w-full py-2 rounded-xl bg-neutral-800 hover:bg-neutral-700 text-xs font-semibold text-white border border-neutral-700">Request Setup</button>
                 </div>
 
                 <div className="bg-neutral-900/60 border border-neutral-800 rounded-2xl p-6 space-y-3 flex flex-col justify-between">
                   <div className="space-y-2">
-                    <div className="w-8 h-8 rounded-lg bg-cyan-950 border border-cyan-800 flex items-center justify-center text-cyan-400 font-bold text-xs">
-                      $99
-                    </div>
+                    <div className="w-8 h-8 rounded-lg bg-cyan-950 border border-cyan-800 flex items-center justify-center text-cyan-400 font-bold text-xs">$99</div>
                     <h3 className="text-base font-bold text-white">SEO & Speed Audit</h3>
-                    <p className="text-xs text-neutral-400 leading-relaxed">
-                      Detailed Core Web Vitals audit, meta tag optimization, structured schema setup, and indexing assistance.
-                    </p>
+                    <p className="text-xs text-neutral-400 leading-relaxed">Core Web Vitals audit, meta tag optimization, and indexing assistance.</p>
                   </div>
-                  <button onClick={() => setActiveTab('contact')} className="w-full py-2 rounded-xl bg-neutral-800 hover:bg-neutral-700 text-xs font-semibold text-white border border-neutral-700">
-                    Request Audit
-                  </button>
+                  <button onClick={() => setActiveTab('contact')} className="w-full py-2 rounded-xl bg-neutral-800 hover:bg-neutral-700 text-xs font-semibold text-white border border-neutral-700">Request Audit</button>
                 </div>
 
                 <div className="bg-neutral-900/60 border border-neutral-800 rounded-2xl p-6 space-y-3 flex flex-col justify-between">
                   <div className="space-y-2">
-                    <div className="w-8 h-8 rounded-lg bg-indigo-950 border border-indigo-800 flex items-center justify-center text-indigo-400 font-bold text-xs">
-                      $199
-                    </div>
+                    <div className="w-8 h-8 rounded-lg bg-indigo-950 border border-indigo-800 flex items-center justify-center text-indigo-400 font-bold text-xs">$199</div>
                     <h3 className="text-base font-bold text-white">Custom Landing Page</h3>
-                    <p className="text-xs text-neutral-400 leading-relaxed">
-                      Fully responsive React/Next.js single-page application customized for your digital brand or app launch.
-                    </p>
+                    <p className="text-xs text-neutral-400 leading-relaxed">Fully responsive single-page application customized for your app launch.</p>
                   </div>
-                  <button onClick={() => setActiveTab('contact')} className="w-full py-2 rounded-xl bg-neutral-800 hover:bg-neutral-700 text-xs font-semibold text-white border border-neutral-700">
-                    Get Started
-                  </button>
+                  <button onClick={() => setActiveTab('contact')} className="w-full py-2 rounded-xl bg-neutral-800 hover:bg-neutral-700 text-xs font-semibold text-white border border-neutral-700">Get Started</button>
                 </div>
               </div>
             </div>
@@ -929,96 +828,60 @@ ${JSON.stringify({
             <div className="space-y-8 max-w-4xl mx-auto">
               <div className="text-center space-y-2">
                 <h2 className="text-3xl font-extrabold text-white">Clear & Honest Pricing</h2>
-                <p className="text-xs text-neutral-400">
-                  Select free browser utilities, affordable micro-services, or app subscriptions.
-                </p>
+                <p className="text-xs text-neutral-400">Select free browser utilities or micro-services.</p>
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
-                {/* Free Tier */}
                 <div className="bg-neutral-900/50 border border-neutral-800 rounded-2xl p-6 flex flex-col justify-between space-y-6">
                   <div className="space-y-4">
                     <span className="text-xs font-bold text-neutral-400 uppercase">Starter Tools</span>
-                    <div>
-                      <span className="text-3xl font-black text-white">$0</span>
-                      <span className="text-xs text-neutral-500 ml-1">/ lifetime</span>
-                    </div>
+                    <div><span className="text-3xl font-black text-white">$0</span></div>
                     <ul className="space-y-2 text-xs text-neutral-300">
                       <li className="flex items-center gap-2"><Check className="w-3.5 h-3.5 text-emerald-400" /> All 6 browser tools</li>
-                      <li className="flex items-center gap-2"><Check className="w-3.5 h-3.5 text-emerald-400" /> No registration required</li>
                       <li className="flex items-center gap-2"><Check className="w-3.5 h-3.5 text-emerald-400" /> Ad-supported experience</li>
                     </ul>
                   </div>
-                  <button
-                    onClick={() => setActiveTab('tools')}
-                    className="w-full py-2.5 rounded-xl border border-neutral-700 bg-neutral-800 hover:bg-neutral-700 text-xs font-bold text-white transition-all"
-                  >
-                    Use Browser Tools
-                  </button>
+                  <button onClick={() => setActiveTab('tools')} className="w-full py-2.5 rounded-xl border border-neutral-700 bg-neutral-800 text-xs font-bold text-white">Use Browser Tools</button>
                 </div>
 
-                {/* SynthBudget Pro */}
-                <div className="bg-neutral-900 border-2 border-emerald-500/80 rounded-2xl p-6 flex flex-col justify-between space-y-6 relative shadow-lg shadow-emerald-500/10">
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-emerald-400 text-neutral-950 font-black text-[10px] uppercase tracking-wider px-3 py-0.5 rounded-full">
-                    Mobile App
-                  </div>
-                  <div className="space-y-4 pt-2">
+                <div className="bg-neutral-900 border-2 border-emerald-500/80 rounded-2xl p-6 flex flex-col justify-between space-y-6">
+                  <div className="space-y-4">
                     <span className="text-xs font-bold text-emerald-400 uppercase">SynthBudget Pro</span>
-                    <div>
-                      <span className="text-3xl font-black text-white">$4.99</span>
-                      <span className="text-xs text-neutral-500 ml-1">/ month</span>
-                    </div>
+                    <div><span className="text-3xl font-black text-white">$4.99</span><span className="text-xs text-neutral-500 ml-1">/ month</span></div>
                     <ul className="space-y-2 text-xs text-neutral-300">
                       <li className="flex items-center gap-2"><Check className="w-3.5 h-3.5 text-emerald-400" /> Ad-free mobile experience</li>
-                      <li className="flex items-center gap-2"><Check className="w-3.5 h-3.5 text-emerald-400" /> Unlimited budget tracking</li>
-                      <li className="flex items-center gap-2"><Check className="w-3.5 h-3.5 text-emerald-400" /> Cloud sync & data backup</li>
+                      <li className="flex items-center gap-2"><Check className="w-3.5 h-3.5 text-emerald-400" /> Cloud sync & backup</li>
                     </ul>
                   </div>
-                  <button
-                    onClick={() => setActiveTab('synthbudget')}
-                    className="w-full py-2.5 rounded-xl bg-emerald-400 hover:bg-emerald-300 text-xs font-black text-neutral-950 transition-all"
-                  >
-                    Learn More
-                  </button>
+                  <button onClick={() => setActiveTab('synthbudget')} className="w-full py-2.5 rounded-xl bg-emerald-400 text-xs font-black text-neutral-950">Learn More</button>
                 </div>
 
-                {/* Micro-Services Tier */}
                 <div className="bg-neutral-900/50 border border-neutral-800 rounded-2xl p-6 flex flex-col justify-between space-y-6">
                   <div className="space-y-4">
                     <span className="text-xs font-bold text-neutral-400 uppercase">Micro Services</span>
-                    <div>
-                      <span className="text-3xl font-black text-white">$49 - $199</span>
-                    </div>
+                    <div><span className="text-3xl font-black text-white">$49 - $199</span></div>
                     <ul className="space-y-2 text-xs text-neutral-300">
-                      <li className="flex items-center gap-2"><Check className="w-3.5 h-3.5 text-emerald-400" /> DNS / Domain troubleshooting</li>
-                      <li className="flex items-center gap-2"><Check className="w-3.5 h-3.5 text-emerald-400" /> Fast single-page dev</li>
-                      <li className="flex items-center gap-2"><Check className="w-3.5 h-3.5 text-emerald-400" /> Core Web Vitals optimization</li>
+                      <li className="flex items-center gap-2"><Check className="w-3.5 h-3.5 text-emerald-400" /> DNS troubleshooting</li>
+                      <li className="flex items-center gap-2"><Check className="w-3.5 h-3.5 text-emerald-400" /> Single-page dev</li>
                     </ul>
                   </div>
-                  <button
-                    onClick={() => setActiveTab('contact')}
-                    className="w-full py-2.5 rounded-xl border border-neutral-700 bg-neutral-800 hover:bg-neutral-700 text-xs font-bold text-white transition-all"
-                  >
-                    Contact Support
-                  </button>
+                  <button onClick={() => setActiveTab('contact')} className="w-full py-2.5 rounded-xl border border-neutral-700 bg-neutral-800 text-xs font-bold text-white">Contact Support</button>
                 </div>
               </div>
             </div>
           )}
 
-          {/* TAB 6: CONTACT FORM */}
+          {/* TAB 6: CONTACT */}
           {activeTab === 'contact' && (
             <div className="max-w-xl mx-auto bg-neutral-900/50 border border-neutral-800 rounded-2xl p-6 sm:p-8 space-y-6">
               <div>
-                <h2 className="text-xl font-bold text-white">Contact & Client Inquiries</h2>
-                <p className="text-xs text-neutral-400 mt-1">
-                  Have a question about Synth Labs Studio or need assistance with your site? Send a message below.
-                </p>
+                <h2 className="text-xl font-bold text-white">Contact & Support</h2>
+                <p className="text-xs text-neutral-400 mt-1">Have a question or request? Send a message below.</p>
               </div>
 
               {contactSuccess ? (
                 <div className="p-4 bg-emerald-950/80 border border-emerald-800 rounded-xl text-xs text-emerald-300 flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-400" /> Message submitted successfully! We will get back to you shortly.
+                  <CheckCircle2 className="w-4 h-4 text-emerald-400" /> Message submitted successfully!
                 </div>
               ) : (
                 <form onSubmit={handleContactSubmit} className="space-y-4">
@@ -1043,7 +906,7 @@ ${JSON.stringify({
                     />
                   </div>
                   <div>
-                    <label className="block text-xs font-semibold text-neutral-400 mb-1">Message / Request Details</label>
+                    <label className="block text-xs font-semibold text-neutral-400 mb-1">Message</label>
                     <textarea
                       rows={4}
                       required
@@ -1052,10 +915,7 @@ ${JSON.stringify({
                       className="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-3.5 py-2 text-xs text-neutral-200 focus:outline-none focus:border-emerald-400 resize-none"
                     />
                   </div>
-                  <button
-                    type="submit"
-                    className="w-full bg-emerald-400 hover:bg-emerald-300 text-neutral-950 font-bold py-2.5 rounded-xl text-xs transition-colors flex items-center justify-center gap-2"
-                  >
+                  <button type="submit" className="w-full bg-emerald-400 hover:bg-emerald-300 text-neutral-950 font-bold py-2.5 rounded-xl text-xs transition-colors flex items-center justify-center gap-2">
                     <Send className="w-3.5 h-3.5" /> Send Message
                   </button>
                 </form>
@@ -1063,29 +923,18 @@ ${JSON.stringify({
             </div>
           )}
 
-          {/* TAB 7: PRIVACY POLICY */}
+          {/* TAB 7 & 8: LEGAL */}
           {activeTab === 'privacy' && (
             <div className="max-w-3xl mx-auto bg-neutral-900/40 border border-neutral-800 rounded-2xl p-6 sm:p-8 space-y-4 text-xs text-neutral-300 leading-relaxed">
               <h2 className="text-xl font-bold text-white">Privacy Policy</h2>
-              <p>Last updated: 2026. Synth Labs Studio (operating on <strong>synthlabsstudio.com</strong>) respects your privacy.</p>
-              <h3 className="text-sm font-bold text-neutral-200 pt-2">1. Client-Side Tools</h3>
-              <p>All prompt engineering, SERP previewing, keyword calculations, and schema generations run locally within your web browser. No prompt inputs are saved or transmitted to third-party databases.</p>
-              <h3 className="text-sm font-bold text-neutral-200 pt-2">2. Advertising & Cookies (Google AdSense & AdMob)</h3>
-              <p>Third-party vendors, including Google, use cookies to serve ads based on prior visits. You may opt out of personalized advertising by visiting Google Ads Settings.</p>
-              <h3 className="text-sm font-bold text-neutral-200 pt-2">3. Contact Inquiries</h3>
-              <p>Contact information submitted via our forms is used solely to respond to direct service inquiries and is never sold.</p>
+              <p>Synth Labs Studio respects your privacy. All interactive prompt tools process data locally in your browser.</p>
             </div>
           )}
 
-          {/* TAB 8: TERMS OF SERVICE */}
           {activeTab === 'terms' && (
             <div className="max-w-3xl mx-auto bg-neutral-900/40 border border-neutral-800 rounded-2xl p-6 sm:p-8 space-y-4 text-xs text-neutral-300 leading-relaxed">
               <h2 className="text-xl font-bold text-white">Terms of Service</h2>
-              <p>By accessing synthlabsstudio.com, you agree to use our digital tools and resources for lawful purposes.</p>
-              <h3 className="text-sm font-bold text-neutral-200 pt-2">1. Intellectual Property & Code</h3>
-              <p>Output generated by our browser tools is free for commercial and non-commercial use by the user.</p>
-              <h3 className="text-sm font-bold text-neutral-200 pt-2">2. Disclaimers</h3>
-              <p>Tools and calculators provide estimates only. We assume no liability for search engine ranking alterations or financial outcomes.</p>
+              <p>By accessing synthlabsstudio.com, you agree to use our digital tools for lawful purposes.</p>
             </div>
           )}
 
@@ -1095,21 +944,20 @@ ${JSON.stringify({
       {/* Footer */}
       <footer className="border-t border-neutral-800 bg-neutral-950 text-neutral-500 text-xs py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="text-center md:text-left">
+          <div>
             © {new Date().getFullYear()} Synth Labs Studio (<span className="text-neutral-300">synthlabsstudio.com</span>). All rights reserved.
           </div>
           <div className="flex flex-wrap items-center justify-center gap-4 text-xs">
-            <button onClick={() => setActiveTab('tools')} className="hover:text-white transition-colors">Tools</button>
-            <button onClick={() => setActiveTab('posts')} className="hover:text-white transition-colors">Guides</button>
-            <button onClick={() => setActiveTab('services')} className="hover:text-white transition-colors">Services</button>
-            <button onClick={() => setActiveTab('pricing')} className="hover:text-white transition-colors">Pricing</button>
-            <button onClick={() => setActiveTab('contact')} className="hover:text-white transition-colors">Contact</button>
-            <button onClick={() => setActiveTab('privacy')} className="hover:text-white transition-colors">Privacy Policy</button>
-            <button onClick={() => setActiveTab('terms')} className="hover:text-white transition-colors">Terms of Service</button>
+            <button onClick={() => setActiveTab('tools')} className="hover:text-white">Tools</button>
+            <button onClick={() => setActiveTab('posts')} className="hover:text-white">Guides</button>
+            <button onClick={() => setActiveTab('services')} className="hover:text-white">Services</button>
+            <button onClick={() => setActiveTab('pricing')} className="hover:text-white">Pricing</button>
+            <button onClick={() => setActiveTab('contact')} className="hover:text-white">Contact</button>
+            <button onClick={() => setActiveTab('privacy')} className="hover:text-white">Privacy Policy</button>
+            <button onClick={() => setActiveTab('terms')} className="hover:text-white">Terms of Service</button>
           </div>
         </div>
       </footer>
-
     </div>
   );
 }
