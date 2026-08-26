@@ -2,6 +2,8 @@ import { useEffect, useMemo, useState } from "react";
 import {
   ArrowRight,
   BarChart3,
+  BadgeDollarSign,
+  BrainCircuit,
   BriefcaseBusiness,
   Check,
   ChevronRight,
@@ -17,11 +19,14 @@ import {
   KeyRound,
   Laptop,
   Lightbulb,
+  Layers3,
+  Lock,
   Mail,
   Menu,
   MessageCircleQuestion,
   Moon,
   Search,
+  SearchCheck,
   Send,
   ShieldCheck,
   Smartphone,
@@ -29,6 +34,7 @@ import {
   Sun,
   Target,
   Terminal,
+  Unlock,
   WandSparkles,
   X,
   Zap,
@@ -40,6 +46,7 @@ const navItems = [
   ["Tools Suite", "tools"],
   ["Agency Services", "services"],
   ["SynthBudget App", "synthbudget"],
+  ["Pricing", "pricing"],
   ["About", "about"],
 ];
 
@@ -48,6 +55,9 @@ const toolMeta = [
   { id: "seo", label: "SERP Preview", icon: Search, short: "SEO" },
   { id: "hooks", label: "Hook Studio", icon: Sparkles, short: "Hooks" },
   { id: "density", label: "Readability", icon: BarChart3, short: "Analyze" },
+  { id: "intent", label: "Search Intent", icon: SearchCheck, short: "Intent", pro: true },
+  { id: "topical", label: "Authority Mapper", icon: Layers3, short: "Topics", pro: true },
+  { id: "entity", label: "Entity Auditor", icon: BrainCircuit, short: "Entities", pro: true },
 ];
 
 const services = [
@@ -155,17 +165,17 @@ function Modal({ open, onClose, title, eyebrow, children, testId }) {
 function AdSlot({ children, variant = "wide", id }) {
   return (
     <aside className={`ad-slot ad-slot-${variant}`} aria-label="Advertisement placeholder" data-testid={id}>
-      <span>AD SPACE</span>
+      <span>AD PLACEHOLDER</span>
       <p>{children}</p>
     </aside>
   );
 }
 
-function Header({ dark, toggleTheme, openSupport, drawerOpen, setDrawerOpen }) {
+function Header({ dark, toggleTheme, openSupport, drawerOpen, setDrawerOpen, openPricing, openSection }) {
   const navigate = (id) => {
     const wasOpen = drawerOpen;
     setDrawerOpen(false);
-    const runNavigation = () => scrollToSection(id, id === "home" ? "auto" : "smooth");
+    const runNavigation = () => id === "pricing" ? openPricing() : openSection(id);
     if (wasOpen) setTimeout(runNavigation, 360);
     else runNavigation();
   };
@@ -302,7 +312,7 @@ function Hero({ onSupport }) {
 
 function Metrics() {
   const metrics = [
-    ["4", "Built-In Micro-Tools", "Purpose-built utilities"],
+    ["7", "Built-In Micro-Tools", "4 free + 3 Pro tools"],
     ["100%", "Client-Side Engine", "Runs in your browser"],
     ["0", "API Keys Required", "No setup or account"],
     ["<1s", "Instant Processing", "Results without waiting"],
@@ -442,8 +452,102 @@ function DensityTool() {
   );
 }
 
-function ToolsSuite({ copy }) {
+function IntentTool() {
+  const [queries, setQueries] = useState("best expense tracker for freelancers\nhow to improve topical authority\nSynth Labs login\nhire an SEO consultant");
+  const classify = (query) => {
+    const value = query.toLowerCase();
+    if (/login|official|dashboard|download|website|app store/.test(value)) return ["Navigational", "Known destination", 94];
+    if (/buy|price|pricing|cost|subscribe|hire|book|service|agency/.test(value)) return ["Transactional", "Ready to act", 91];
+    if (/(?:\bbest\b|\btop\b|\breviews?\b|\bvs\b|\bversus\b|\bcompar(?:e|ison)\b|\balternatives?\b)/.test(value)) return ["Commercial", "Evaluating options", 89];
+    return ["Informational", "Learning or solving", 86];
+  };
+  const rows = queries.split(/\n|,/).map((query) => query.trim()).filter(Boolean).slice(0, 12).map((query) => ({ query, result: classify(query) }));
+  return (
+    <div className="pro-tool-layout" data-testid="intent-tool-panel">
+      <div className="tool-form">
+        <div className="field"><label htmlFor="intent-queries">Search queries</label><textarea id="intent-queries" data-testid="intent-queries-input" className="tool-input analysis-textarea" value={queries} onChange={(event) => setQueries(event.target.value)} placeholder="Add one query per line..." /></div>
+        <p className="pro-helper" data-testid="intent-helper-text"><SearchCheck size={16}/> Uses transparent phrase-pattern analysis. No search data leaves your device.</p>
+      </div>
+      <div className="intent-results" data-testid="intent-results">
+        <div className="pro-result-head"><span>Query</span><span>Intent signal</span><span>Confidence</span></div>
+        {rows.map(({ query, result }, index) => <article key={`${query}-${index}`} data-testid={`intent-result-${index + 1}`}><p>{query}</p><div><strong>{result[0]}</strong><small>{result[1]}</small></div><span>{result[2]}%</span></article>)}
+        {!rows.length && <div className="pro-empty" data-testid="intent-empty-state">Add a query to classify its likely search intent.</div>}
+      </div>
+    </div>
+  );
+}
+
+function TopicalTool() {
+  const [topic, setTopic] = useState("personal finance for freelancers");
+  const [audience, setAudience] = useState("independent professionals building stable income");
+  const subject = topic.trim() || "your core topic";
+  const clusters = [
+    ["Foundations", [`What is ${subject}?`, `${subject}: essential terms`, `Common myths about ${subject}`]],
+    ["Strategy", [`A practical ${subject} framework`, `${subject} goals and benchmarks`, `Choosing the right approach`]],
+    ["Implementation", [`Step-by-step ${subject} workflow`, `Tools and templates to use`, `Mistakes that slow progress`]],
+    ["Measurement", [`How to measure ${subject}`, `Signals that your strategy works`, `A monthly review checklist`]],
+  ];
+  return (
+    <div className="topical-layout" data-testid="topical-tool-panel">
+      <div className="topical-controls">
+        <div className="field"><label htmlFor="topical-topic">Core topic</label><input id="topical-topic" data-testid="topical-topic-input" className="tool-input" value={topic} onChange={(event) => setTopic(event.target.value)} /></div>
+        <div className="field"><label htmlFor="topical-audience">Target audience</label><textarea id="topical-audience" data-testid="topical-audience-input" className="tool-input" rows="3" value={audience} onChange={(event) => setAudience(event.target.value)} /></div>
+        <div className="hub-page" data-testid="topical-hub-page"><span>CORE HUB PAGE</span><strong>The complete guide to {subject}</strong><p>Built for {audience || "your target reader"}</p></div>
+      </div>
+      <div className="cluster-grid" data-testid="topical-cluster-grid">
+        {clusters.map(([name, ideas], index) => <article key={name} data-testid={`topic-cluster-${index + 1}`}><div><span>0{index + 1}</span><strong>{name}</strong></div><ul>{ideas.map((idea) => <li key={idea}><ChevronRight size={14}/>{idea}</li>)}</ul></article>)}
+      </div>
+    </div>
+  );
+}
+
+function EntityTool() {
+  const [topic, setTopic] = useState("technical SEO");
+  const [content, setContent] = useState("Technical SEO helps search engines crawl and understand a website. A clear site architecture, useful metadata, internal links, and an XML sitemap can improve discoverability. Teams should review indexing and page experience regularly.");
+  const libraries = {
+    seo: ["search engine", "crawl", "indexing", "metadata", "internal links", "sitemap", "schema", "page experience", "search console", "canonical"],
+    finance: ["budget", "income", "expense", "savings", "cash flow", "transaction", "category", "goal", "debt", "emergency fund"],
+    ai: ["model", "prompt", "training data", "context", "inference", "automation", "workflow", "accuracy", "evaluation", "privacy"],
+  };
+  const key = /seo|search/.test(topic.toLowerCase()) ? "seo" : /budget|finance|money/.test(topic.toLowerCase()) ? "finance" : "ai";
+  const expected = libraries[key];
+  const normalized = content.toLowerCase();
+  const present = expected.filter((entity) => normalized.includes(entity));
+  const missing = expected.filter((entity) => !normalized.includes(entity));
+  const score = Math.round((present.length / expected.length) * 100);
+  return (
+    <div className="pro-tool-layout entity-layout" data-testid="entity-tool-panel">
+      <div className="tool-form">
+        <div className="field"><label htmlFor="entity-topic">Primary topic</label><input id="entity-topic" data-testid="entity-topic-input" className="tool-input" value={topic} onChange={(event) => setTopic(event.target.value)} /></div>
+        <div className="field"><label htmlFor="entity-content">Draft content</label><textarea id="entity-content" data-testid="entity-content-input" className="tool-input analysis-textarea" value={content} onChange={(event) => setContent(event.target.value)} /></div>
+      </div>
+      <div className="entity-results">
+        <div className="entity-score" data-testid="entity-coverage-score"><div style={{ "--score": `${score * 3.6}deg` }}><strong>{score}</strong><small>/100</small></div><span><b>Entity coverage</b><small>{score >= 70 ? "Strong topical coverage" : score >= 40 ? "Useful foundation" : "Needs more context"}</small></span></div>
+        <section data-testid="entity-present-list"><h4><Check size={15}/> Entities found</h4><div className="entity-chips">{present.map((entity) => <span key={entity}>{entity}</span>)}{!present.length && <small>None detected yet</small>}</div></section>
+        <section data-testid="entity-missing-list"><h4><Target size={15}/> Context opportunities</h4><div className="entity-chips missing">{missing.map((entity) => <span key={entity}>{entity}</span>)}</div></section>
+        <p className="audit-note" data-testid="entity-audit-note">Include relevant entities naturally. Coverage is a writing aid, not a ranking guarantee.</p>
+      </div>
+    </div>
+  );
+}
+
+function LockedTool({ title, openPricing }) {
+  return (
+    <div className="locked-tool" data-testid="pro-tool-locked-state">
+      <span className="locked-icon"><Lock size={28}/></span>
+      <div className="pro-label" data-testid="locked-pro-label"><Zap size={12}/> SYNTH LABS PRO</div>
+      <h3 data-testid="locked-tool-title">Unlock {title}</h3>
+      <p>This advanced workflow is included in Synth Labs Pro. Activate the local demo plan to explore it without payment.</p>
+      <button className="button primary" data-testid="locked-view-pricing-button" onClick={openPricing}><BadgeDollarSign size={18}/> View Pro pricing</button>
+      <small data-testid="locked-demo-note">Demo access is stored only in this browser.</small>
+    </div>
+  );
+}
+
+function ToolsSuite({ copy, proAccess, openPricing }) {
   const [active, setActive] = useState("prompt");
+  const activeTool = toolMeta.find((tool) => tool.id === active);
+  const locked = activeTool?.pro && !proAccess;
   return (
     <section className="section-shell section-block tools-section" id="tools" data-testid="tools-section">
       <div className="section-heading split-heading">
@@ -454,18 +558,24 @@ function ToolsSuite({ copy }) {
         <div className="tool-tabs" role="tablist" aria-label="Micro-tools" data-testid="tools-tab-list">
           {toolMeta.map((tool, index) => {
             const Icon = tool.icon;
-            return <button key={tool.id} role="tab" aria-selected={active === tool.id} className={active === tool.id ? "active" : ""} data-testid={`tool-tab-${tool.id}`} onClick={() => setActive(tool.id)}><span>0{index + 1}</span><Icon size={18} /><b>{tool.label}</b><small>{tool.short}</small></button>;
+            return <button key={tool.id} role="tab" aria-selected={active === tool.id} className={`${active === tool.id ? "active" : ""} ${tool.pro ? "pro-tab" : ""}`} data-testid={`tool-tab-${tool.id}`} onClick={() => setActive(tool.id)}><span>0{index + 1}</span><Icon size={18} /><b>{tool.label}{tool.pro && <em>PRO</em>}</b><small>{tool.short}{tool.pro && " · PRO"}</small></button>;
           })}
         </div>
+        <div className="tool-ad-wrap"><AdSlot id="adsense-between-tools-slot" variant="tool">[ Ad Placeholder · Between Tools Responsive Unit ]</AdSlot></div>
         <div className="tool-panel">
           <div className="tool-panel-heading">
-            <div><span className="tool-kicker" data-testid="active-tool-kicker">ACTIVE WORKSPACE</span><h3 data-testid="active-tool-title">{toolMeta.find((tool) => tool.id === active)?.label}</h3></div>
-            <div className="local-status" data-testid="local-processing-status"><i /> Local processing</div>
+            <div><span className="tool-kicker" data-testid="active-tool-kicker">{activeTool?.pro ? "SYNTH LABS PRO" : "ACTIVE WORKSPACE"}</span><h3 data-testid="active-tool-title">{activeTool?.label}</h3></div>
+            <div className="local-status" data-testid="local-processing-status">{activeTool?.pro && (proAccess ? <Unlock size={14}/> : <Lock size={14}/>)}<i /> {activeTool?.pro && proAccess ? "Pro active · " : ""}Local processing</div>
           </div>
-          {active === "prompt" && <PromptTool copy={copy} />}
-          {active === "seo" && <SeoTool />}
-          {active === "hooks" && <HooksTool copy={copy} />}
-          {active === "density" && <DensityTool />}
+          {locked ? <LockedTool title={activeTool.label} openPricing={openPricing}/> : <>
+            {active === "prompt" && <PromptTool copy={copy} />}
+            {active === "seo" && <SeoTool />}
+            {active === "hooks" && <HooksTool copy={copy} />}
+            {active === "density" && <DensityTool />}
+            {active === "intent" && <IntentTool />}
+            {active === "topical" && <TopicalTool />}
+            {active === "entity" && <EntityTool />}
+          </>}
         </div>
       </div>
     </section>
@@ -576,12 +686,12 @@ function ContactForm({ type, service, onDone }) {
   );
 }
 
-function Footer({ openSupport, openLegal }) {
+function Footer({ openSupport, openLegal, openPricing, openSection }) {
   return (
     <footer className="site-footer" data-testid="site-footer">
       <div className="section-shell footer-main">
         <div className="footer-brand"><div className="brand" data-testid="footer-brand"><span className="brand-mark"><Zap size={19} fill="currentColor" /></span><span className="brand-copy"><strong>SYNTH LABS</strong><small>Digital Agency</small></span></div><p>Prompt engineering, SEO micro-tools, thoughtful digital products, and practical growth systems.</p></div>
-        <div className="footer-column"><h3>Explore</h3>{navItems.slice(0,4).map(([label,id]) => <button key={id} data-testid={`footer-nav-${id}`} onClick={() => scrollToSection(id)}>{label}</button>)}</div>
+        <div className="footer-column"><h3>Explore</h3>{navItems.slice(0,5).map(([label,id]) => <button key={id} data-testid={`footer-nav-${id}`} onClick={() => id === "pricing" ? openPricing() : openSection(id)}>{label}</button>)}</div>
         <div className="footer-column"><h3>Legal & company</h3><button data-testid="footer-privacy-button" onClick={() => openLegal("privacy")}>Privacy Policy</button><button data-testid="footer-terms-button" onClick={() => openLegal("terms")}>Terms of Service</button><button data-testid="footer-about-button" onClick={() => openLegal("about")}>About Us</button><button data-testid="footer-support-button" onClick={openSupport}>Support & Contact</button></div>
         <div className="footer-contact"><h3>Need a human?</h3><a href="mailto:support@synthlabs.com" data-testid="footer-email-link"><Mail size={16}/> support@synthlabs.com</a><button className="button soft" data-testid="footer-open-support-button" onClick={openSupport}>Open support center</button></div>
       </div>
@@ -590,11 +700,11 @@ function Footer({ openSupport, openLegal }) {
   );
 }
 
-function BottomNav({ dark, toggleTheme, openSupport }) {
+function BottomNav({ dark, toggleTheme, openSupport, openSection }) {
   return (
     <nav className="bottom-nav" aria-label="Quick navigation" data-testid="mobile-bottom-navigation">
-      <button data-testid="bottom-nav-home" onClick={() => scrollToSection("home")}><Home size={19}/><span>Home</span></button>
-      <button data-testid="bottom-nav-tools" onClick={() => scrollToSection("tools")}><WandSparkles size={19}/><span>Tools</span></button>
+      <button data-testid="bottom-nav-home" onClick={() => openSection("home")}><Home size={19}/><span>Home</span></button>
+      <button data-testid="bottom-nav-tools" onClick={() => openSection("tools")}><WandSparkles size={19}/><span>Tools</span></button>
       <button data-testid="bottom-nav-theme" onClick={toggleTheme}>{dark ? <Sun size={19}/> : <Moon size={19}/>}<span>Theme</span></button>
       <button data-testid="bottom-nav-support" onClick={openSupport}><MessageCircleQuestion size={19}/><span>Support</span></button>
     </nav>
@@ -634,8 +744,80 @@ const legalContent = {
   },
 };
 
+function PricingPage({ proAccess, setProAccess, openTools }) {
+  const activatePro = () => {
+    localStorage.setItem("synthlabs_pro_access", "true");
+    setProAccess(true);
+  };
+  const resetPro = () => {
+    localStorage.removeItem("synthlabs_pro_access");
+    setProAccess(false);
+  };
+  const comparison = [
+    ["Core browser tools", "4 tools", "All 7 tools"],
+    ["Search intent classification", "—", "Included"],
+    ["Topical authority maps", "—", "Included"],
+    ["Entity content auditing", "—", "Included"],
+    ["Client-side processing", "Included", "Included"],
+    ["API keys required", "None", "None"],
+  ];
+  return (
+    <section className="pricing-page section-shell" data-testid="pricing-page">
+      <div className="pricing-hero">
+        <p className="eyebrow"><BadgeDollarSign size={14}/> SIMPLE MONTHLY ACCESS</p>
+        <h1 data-testid="pricing-heading">Start free. Unlock deeper strategy for <span>$9 a month.</span></h1>
+        <p data-testid="pricing-description">Choose the workspace that fits today. Both plans process tool inputs locally in your browser and require no external API keys.</p>
+      </div>
+
+      <div className="pricing-grid" data-testid="pricing-plan-grid">
+        <article className="price-card" data-testid="free-plan-card">
+          <div className="price-card-top"><span>FREE</span><Zap size={21}/></div>
+          <h2>Free workspace</h2>
+          <p className="price"><strong>$0</strong><span>/ forever</span></p>
+          <p className="price-description">The essential toolkit for everyday content and SEO production.</p>
+          <ul>
+            <li><Check size={17}/> Prompt Engineer</li>
+            <li><Check size={17}/> SEO & SERP Previewer</li>
+            <li><Check size={17}/> Viral Hook Studio</li>
+            <li><Check size={17}/> Readability Calculator</li>
+          </ul>
+          <button className="button outline" data-testid="free-plan-continue-button" onClick={openTools}>Continue with Free</button>
+        </article>
+        <article className="price-card featured" data-testid="pro-plan-card">
+          <div className="popular-flag" data-testid="pro-popular-label">MINIMUM PRO PLAN</div>
+          <div className="price-card-top"><span>SYNTH LABS PRO</span><BrainCircuit size={21}/></div>
+          <h2>Strategy workspace</h2>
+          <p className="price"><strong>$9</strong><span>/ month</span></p>
+          <p className="price-description">Advanced local analysis for teams building sustainable search visibility.</p>
+          <ul>
+            <li><Check size={17}/> Everything in Free</li>
+            <li><Check size={17}/> AI Search Intent Classifier</li>
+            <li><Check size={17}/> Topical Authority Mapper</li>
+            <li><Check size={17}/> Entity-Based Content Auditor</li>
+          </ul>
+          {proAccess ? <button className="button primary" data-testid="pro-open-tools-button" onClick={openTools}><Unlock size={18}/> Pro Active — Open Tools</button> : <button className="button primary" data-testid="pro-activate-demo-button" onClick={activatePro}><Unlock size={18}/> Activate Pro Demo</button>}
+          <small data-testid="pro-demo-disclaimer">Demo gate only. No payment or subscription is created.</small>
+          {proAccess && <button className="reset-demo" data-testid="pro-reset-demo-button" onClick={resetPro}>Reset demo access</button>}
+        </article>
+      </div>
+
+      <div className="comparison-section" data-testid="plan-comparison-section">
+        <div className="comparison-heading"><p className="eyebrow"><Gauge size={14}/> PLAN COMPARISON</p><h2>Clear differences, no hidden claims.</h2></div>
+        <div className="comparison-table" role="table" aria-label="Plan comparison">
+          <div className="comparison-header" role="row"><strong>Capability</strong><strong>Free</strong><strong>Pro · $9/mo</strong></div>
+          {comparison.map(([feature, free, pro], index) => <div className="comparison-row" role="row" key={feature} data-testid={`comparison-row-${index + 1}`}><strong>{feature}</strong><span data-label="Free">{free}</span><span data-label="Pro · $9/mo">{pro}</span></div>)}
+        </div>
+      </div>
+
+      <div className="pricing-note" data-testid="pricing-local-note"><ShieldCheck size={21}/><div><strong>Privacy-first by architecture</strong><p>Plan status and tool data remain in this browser for the current demo. The three Pro tools use local rule-based analysis and do not promise rankings or traffic outcomes.</p></div></div>
+    </section>
+  );
+}
+
 export default function App() {
   const [dark, setDark] = useState(() => localStorage.getItem("synthlabs_theme") !== "light");
+  const [page, setPage] = useState(() => window.location.pathname === "/pricing" ? "pricing" : "home");
+  const [proAccess, setProAccess] = useState(() => localStorage.getItem("synthlabs_pro_access") === "true");
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [modal, setModal] = useState(null);
   const [inquiryService, setInquiryService] = useState("");
@@ -650,6 +832,12 @@ export default function App() {
     document.body.style.overflow = modal || drawerOpen ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
   }, [modal, drawerOpen]);
+
+  useEffect(() => {
+    const handleHistory = () => setPage(window.location.pathname === "/pricing" ? "pricing" : "home");
+    window.addEventListener("popstate", handleHistory);
+    return () => window.removeEventListener("popstate", handleHistory);
+  }, []);
 
   const notify = (message) => {
     setToast(message);
@@ -678,26 +866,43 @@ export default function App() {
     }
   };
   const openInquiry = (service) => { setInquiryService(service); setModal("inquiry"); };
+  const openPricing = () => {
+    if (window.location.pathname !== "/pricing") window.history.pushState({}, "", "/pricing");
+    setPage("pricing");
+    window.scrollTo({ top: 0, behavior: "auto" });
+  };
+  const openSection = (id) => {
+    if (page === "pricing") {
+      window.history.pushState({}, "", "/");
+      setPage("home");
+      window.setTimeout(() => scrollToSection(id, id === "home" ? "auto" : "smooth"), 80);
+    } else {
+      scrollToSection(id, id === "home" ? "auto" : "smooth");
+    }
+  };
 
   const legal = legalContent[modal];
   return (
     <div className="app-shell" data-testid="synth-labs-app">
-      <Header dark={dark} toggleTheme={() => setDark((value) => !value)} openSupport={() => setModal("support")} drawerOpen={drawerOpen} setDrawerOpen={setDrawerOpen} />
+      <Header dark={dark} toggleTheme={() => setDark((value) => !value)} openSupport={() => setModal("support")} drawerOpen={drawerOpen} setDrawerOpen={setDrawerOpen} openPricing={openPricing} openSection={openSection} />
       <main>
-        <Hero onSupport={() => setModal("support")} />
-        <Metrics />
-        <div className="section-shell ad-wrap"><AdSlot id="adsense-header-slot">[ AdSense Header Leaderboard Slot (728x90 / 320x50) ]</AdSlot></div>
-        <ToolsSuite copy={copy} />
-        <div className="section-shell content-ad-grid">
-          <AdSlot id="adsense-in-article-slot" variant="article">[ AdSense In-Article Native Ad Unit ]</AdSlot>
-          <AdSlot id="adsense-sidebar-slot" variant="rectangle">[ AdSense Sidebar Rectangle (300x250) ]</AdSlot>
-        </div>
-        <BudgetShowcase openBeta={() => setModal("beta")} />
-        <Services openInquiry={openInquiry} />
-        <About />
+        <div className="section-shell header-ad-wrap"><AdSlot id="adsense-header-slot">[ Ad Placeholder · Header Leaderboard (728x90 / 320x50) ]</AdSlot></div>
+        {page === "pricing" ? <PricingPage proAccess={proAccess} setProAccess={setProAccess} openTools={() => openSection("tools")}/> : <>
+          <Hero onSupport={() => setModal("support")} />
+          <Metrics />
+          <ToolsSuite copy={copy} proAccess={proAccess} openPricing={openPricing} />
+          <div className="section-shell content-ad-grid">
+            <AdSlot id="adsense-in-article-slot" variant="article">[ Ad Placeholder · AdSense In-Article Native Unit ]</AdSlot>
+            <AdSlot id="adsense-sidebar-slot" variant="rectangle">[ Ad Placeholder · AdSense Sidebar Rectangle (300x250) ]</AdSlot>
+          </div>
+          <div className="section-shell mobile-ad-wrap"><AdSlot id="admob-mobile-slot" variant="mobile">[ Ad Placeholder · Future AdMob Mobile Banner (320x50) ]</AdSlot></div>
+          <BudgetShowcase openBeta={() => setModal("beta")} />
+          <Services openInquiry={openInquiry} />
+          <About />
+        </>}
       </main>
-      <Footer openSupport={() => setModal("support")} openLegal={setModal} />
-      <BottomNav dark={dark} toggleTheme={() => setDark((value) => !value)} openSupport={() => setModal("support")} />
+      <Footer openSupport={() => setModal("support")} openLegal={setModal} openPricing={openPricing} openSection={openSection} />
+      <BottomNav dark={dark} toggleTheme={() => setDark((value) => !value)} openSupport={() => setModal("support")} openSection={openSection} />
 
       <Modal open={modal === "support"} onClose={() => setModal(null)} eyebrow="HELP CENTER" title="How can we help?" testId="support-modal">
         <p className="modal-intro" data-testid="support-modal-intro">Create a local support ticket, then choose whether to send it through your email app.</p>

@@ -1,0 +1,50 @@
+{
+  "summary": "Frontend-only regression completed on public preview URL. Requested pricing/pro-gate/responsive/ad-placeholder/mobile usability flows pass, with one logic bug in Search Intent classification heuristics.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [
+      {
+        "flow": "AI Search Intent Classifier",
+        "issue": "Informational query containing 'topical' is misclassified as Commercial because regex '/top/' matches substring 'top' in 'topical'.",
+        "affected_selectors": [
+          "[data-testid='tool-tab-intent']",
+          "[data-testid='intent-queries-input']",
+          "[data-testid='intent-results']"
+        ]
+      }
+    ],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/frontend/src/App.jsx",
+    "/app/frontend/src/App.css",
+    "/app/test_reports/artifacts_iter4/desktop_loaded.jpeg",
+    "/app/test_reports/artifacts_iter4/final_regression.jpeg",
+    "/app/test_reports/artifacts_iter4/mobile_regression.jpeg"
+  ],
+  "action_items": [
+    "Fix intent regex to avoid substring false positives (e.g., use word boundaries for 'top', 'best', etc.).",
+    "Re-run intent classifier regression specifically with mixed informational/commercial terms such as 'what is topical authority'."
+  ],
+  "critical_code_review_comments": [
+    "App.jsx is 925 lines (>700 guideline); split into smaller focused components/modules to reduce regression risk.",
+    "Intent classifier pattern order and regex granularity causes semantic misclassification in realistic queries."
+  ],
+  "updated_files": [
+    "/app/test_reports/iteration_3.json"
+  ],
+  "success_rate": {
+    "backend": "N/A (frontend-only scope)",
+    "frontend": "96%"
+  },
+  "test_credentials": "Not used (frontend-only scope). /app/memory/test_credentials.md is present but effectively empty.",
+  "seed_data_creation": "Used localStorage UI flows: synthlabs_pro_access toggled during gate tests.",
+  "retest_needed": true,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "Verified: Pricing nav from desktop header, mobile drawer, and footer; pricing plans ($0 and $9/month) and disclaimer; no horizontal overflow at 320/390/768/desktop across pricing/home/tools/pro workspace; Pro tabs locked when access absent; activation/open/reset flows; Topical mapper (hub + 4 clusters); Entity auditor (score/found/missing); ad placeholders by breakpoint; mobile drawer (6 items, closes on pricing); sampled touch targets >=44px; existing free tools/support/theme/beta/agency flows. Remaining bug is intent misclassification edge due regex.",
+  "rca of the issue": "Repro: Activate Pro -> Tools -> Search Intent tab -> input multiline query including 'what is topical authority'. Observed classification = Commercial, expected = Informational in natural-language intent context. Root cause: classify() checks '/best|top|review|.../' where 'top' matches inside 'topical'. Mitigation: tighten regex with word boundaries (e.g., \\btop\\b) and/or prioritize question-form patterns ('what/how/why') before commercial heuristics."
+}

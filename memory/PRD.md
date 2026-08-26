@@ -1,6 +1,6 @@
 # Synth Labs Digital Agency — Product Requirements Document
 
-**Last updated:** 2026-08-25  
+**Last updated:** 2026-08-26  
 **Status:** Initial production-ready frontend complete
 
 ## Original Problem Statement
@@ -35,6 +35,7 @@ The required product includes:
 - **State:** React hooks; no global state library required.
 - **Processing:** Prompt generation, SERP rendering, hook generation, readability scoring, and keyword frequency run entirely in the browser.
 - **Persistence:** Support, beta, and agency submissions are stored in `localStorage` by category.
+- **Pro access:** The current `$9/month` Pro experience uses an explicitly requested client-side demo gate persisted in `localStorage`; no payment is processed.
 - **Communication:** After local save, users can launch a prefilled `mailto:` draft; nothing is silently transmitted.
 - **Integrations:** No external API, authentication, payment, analytics, or database dependency.
 - **Accessibility/testing:** Semantic controls, keyboard focus states, reduced-motion support, responsive breakpoints, and unique `data-testid` attributes across critical elements.
@@ -49,6 +50,10 @@ The required product includes:
 - Clearly labeled AdSense-ready placeholder regions.
 - Legal and support content available without leaving the application.
 - No external API keys and no server dependency for core product usage.
+- Seven total browser tools: four Free tools and three gated Synth Labs Pro tools.
+- A dedicated `/pricing` experience with responsive Free and `$9/month` Pro plan comparison.
+- AdSense header, between-tools, in-article, and sidebar zones plus a future mobile AdMob banner zone.
+- Touch-friendly controls with a minimum 44px interaction target and stacked mobile grids.
 
 ## Implemented
 
@@ -64,6 +69,16 @@ The required product includes:
 - Added Privacy Policy, Terms of Service, About Us, Support/Contact, footer content, and three required AdSense placement containers.
 - Verified production build, responsive desktop/mobile behavior, form flows, clipboard-denied fallback, and deterministic navigation.
 
+### 2026-08-26 — Pro Micro-SaaS Expansion
+- Added the Synth Labs Pro Search Intent Classifier with local phrase-pattern analysis across informational, commercial, navigational, and transactional intent.
+- Added the Topical Authority Mapper with a core hub, audience context, and four responsive content clusters.
+- Added the Entity-Based Content Auditor with local coverage scoring, detected entities, and contextual opportunity suggestions.
+- Added local Pro gating, locked states, browser-persisted demo activation, reset controls, and clear Synth Labs Pro badges.
+- Added a dedicated `/pricing` page with Free and `$9/month` Pro plans, responsive comparison rows, and an honest no-payment demo disclaimer.
+- Added responsive Ad Placeholder zones for header, between-tools, in-article, sidebar, and future mobile AdMob use.
+- Standardized 44px+ touch targets and verified stacking layouts with no horizontal overflow down to 320px.
+- Fixed a search-intent false positive by matching commercial terms as whole words.
+
 ## Prioritized Backlog
 
 ### P0 — Required Before Release
@@ -73,6 +88,7 @@ The required product includes:
 - Add export/download controls for generated prompts, hooks, and readability reports.
 - Add a local history workspace so users can revisit recent tool outputs.
 - Add optional support-ticket export as a plain-text receipt.
+- Connect the Pro plan to a real subscription provider only when paid access is required.
 
 ### P2 — Future Enhancements
 - Add installable PWA support for offline access to the four tools.
@@ -82,6 +98,7 @@ The required product includes:
 
 ## Next Tasks
 
-1. Review wording, service positioning, and legal content with the business owner.
-2. Replace AdSense placeholders with approved ad unit code when an account is ready.
-3. Add downloadable tool reports and local history as the next product iteration.
+1. Review pricing, service positioning, and legal content with the business owner.
+2. Replace AdSense/AdMob placeholders with approved ad unit code when accounts are ready.
+3. Decide when to replace local Pro demo access with a real subscription flow.
+4. Add downloadable tool reports and local history as the next product iteration.
