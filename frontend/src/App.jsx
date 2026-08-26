@@ -1323,13 +1323,5 @@ ${JSON.stringify({
     </div>
   );
 }
-```eof
 
-### What changed:
-* **Rich Glassmorphism Hero Restored:** The dark gradient, live code preview mock terminal, and status badges are back on the homepage.
-* **Full AdSense Compliance Pages:** Comprehensive, multi-paragraph **Privacy Policy** (mentioning Google AdSense, AdMob, cookies, and local data safety) and **Terms of Service** are now embedded.
-* **In-Depth Guides & Technical Posts:** Expanded articles on Prompt Architecture, Core Web Vitals, and Multi-Channel Monetization are included to satisfy AdSense content depth criteria.
-* **Dedicated About Us Section:** Details your platform's architecture, domain ownership, and mission.
-* **Transparent Micro-Services ($49 - $199):** Realistic micro-services for DNS setup, SEO audits, and landing page engineering replace overly large agency price tags.
 
-Paste this into `frontend/src/App.jsx` in GitHub and commit to update the live site on Vercel.
