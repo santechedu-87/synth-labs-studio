@@ -1,4 +1,3 @@
-```react
 import React, { useState, useEffect } from 'react';
 import { 
   Zap, 
@@ -1196,4 +1195,3 @@ export default function App() {
     </div>
   );
 }
-```
