@@ -1,43 +1,35 @@
 ```react
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   Zap, 
   Code2, 
-  Search, 
-  Share2, 
-  Sliders, 
-  FileCode2, 
-  Calculator, 
   Check, 
   ExternalLink, 
   Sparkles, 
   Layers, 
-  ShieldCheck, 
-  Copy,
-  ChevronRight,
-  Menu,
-  X,
-  Mail,
-  ArrowRight,
-  BookOpen,
-  Info,
-  Scale,
-  Shield,
-  Send,
-  Smartphone,
-  CheckCircle2,
-  Terminal
+  Copy, 
+  Menu, 
+  X, 
+  Mail, 
+  ArrowRight, 
+  BookOpen, 
+  Info, 
+  Scale, 
+  Shield, 
+  Send, 
+  Smartphone, 
+  CheckCircle2 
 } from 'lucide-react';
 
 export default function App() {
-  // Navigation & Drawer
+  // Mobile drawer state
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   
-  // Active Interactive Tool ('prompt' | 'serp' | 'hooks' | 'keyword' | 'schema' | 'roi')
+  // Interactive Browser Suite active tab ('prompt' | 'serp' | 'hooks' | 'keyword' | 'schema' | 'roi')
   const [activeTool, setActiveTool] = useState('prompt');
   const [copiedIndex, setCopiedIndex] = useState(null);
   
-  // Legal & Info Modals: 'about' | 'privacy' | 'terms' | 'contact' | 'guides' | null
+  // Compliance Modals: 'about' | 'privacy' | 'terms' | 'guides' | null
   const [activeModal, setActiveModal] = useState(null);
 
   // Contact Form State
@@ -47,14 +39,34 @@ export default function App() {
   const [contactSent, setContactSent] = useState(false);
 
   // =========================================================================
-  // LEMON SQUEEZY CHECKOUT LINKS (Replace with your actual product URLs)
+  // YOUR EXACT LEMON SQUEEZY CHECKOUT & OVERLAY URLS
   // =========================================================================
   const CHECKOUT_LINKS = {
-    synthbudget_pro: "https://synthlabsstudio.lemonsqueezy.com/buy/product-id-synthbudget", // $4.99/mo subscription
-    dns_ssl: "https://synthlabsstudio.lemonsqueezy.com/buy/product-id-dns-ssl",             // $49 one-time
-    react_ui: "https://synthlabsstudio.lemonsqueezy.com/buy/product-id-react-ui",           // $99 one-time
-    speed_tuning: "https://synthlabsstudio.lemonsqueezy.com/buy/product-id-speed-tuning"    // $199 one-time
+    synthbudget_pro: "https://synthlabsstudio.lemonsqueezy.com/checkout/buy/161f71bc-9e8f-4464-b1c5-b0a06fd8af90",
+    synthbudget_pro_embed: "https://synthlabsstudio.lemonsqueezy.com/checkout/buy/161f71bc-9e8f-4464-b1c5-b0a06fd8af90?embed=1",
+    
+    dns_ssl: "https://synthlabsstudio.lemonsqueezy.com/checkout/buy/0d4acdc3-6fbc-453a-b1ca-0c6d52e46b6c",
+    dns_ssl_embed: "https://synthlabsstudio.lemonsqueezy.com/checkout/buy/0d4acdc3-6fbc-453a-b1ca-0c6d52e46b6c?embed=1",
+    
+    react_ui: "https://synthlabsstudio.lemonsqueezy.com/checkout/buy/66086706-6113-4b7b-a3aa-e93784b8b87e",
+    react_ui_embed: "https://synthlabsstudio.lemonsqueezy.com/checkout/buy/66086706-6113-4b7b-a3aa-e93784b8b87e?embed=1",
+    
+    speed_tuning: "https://synthlabsstudio.lemonsqueezy.com/checkout/buy/68d37212-8ddb-4fde-9e94-720f107832d5",
+    speed_tuning_embed: "https://synthlabsstudio.lemonsqueezy.com/checkout/buy/68d37212-8ddb-4fde-9e94-720f107832d5?embed=1"
   };
+
+  // Initialize Lemon Squeezy Overlay library script
+  useEffect(() => {
+    const script = document.createElement('script');
+    script.src = 'https://assets.lemonsqueezy.com/lemon.js';
+    script.defer = true;
+    document.body.appendChild(script);
+    return () => {
+      if (document.body.contains(script)) {
+        document.body.removeChild(script);
+      }
+    };
+  }, []);
 
   // --- TOOL 1: PROMPT ARCHITECT STATE ---
   const [promptPersona, setPromptPersona] = useState('Senior SEO Strategist');
@@ -99,12 +111,12 @@ export default function App() {
       setCopiedIndex(index);
       setTimeout(() => setCopiedIndex(null), 2000);
     } catch (err) {
-      console.error('Fallback copy failed', err);
+      console.error('Copy fallback error:', err);
     }
     document.body.removeChild(textArea);
   };
 
-  // Helper: Dynamic Hook Generator
+  // Helper: Hook Generation
   const handleGenerateHooks = () => {
     const topic = hookTopic.trim() || 'your current workflow';
     if (hookAngle === 'Curiosity Gap') {
@@ -128,7 +140,7 @@ export default function App() {
     }
   };
 
-  // Helper: Keyword Density Calculation
+  // Helper: Keyword Density Math
   const getKeywordMetrics = () => {
     if (!kwText.trim()) return { count: 0, totalWords: 0, density: 0 };
     const words = kwText.toLowerCase().match(/\b[a-z0-9'-]+\b/g) || [];
@@ -141,26 +153,26 @@ export default function App() {
 
   const kwMetrics = getKeywordMetrics();
 
-  // Contact Form Submission
+  // Handle Contact Form Submission
   const handleContactSubmit = (e) => {
     e.preventDefault();
     if (!contactEmail.trim() || !contactMessage.trim()) return;
     setContactSent(true);
     setTimeout(() => {
-      window.location.href = `mailto:sancares87@gmail.com?subject=Synth%20Labs%20Inquiry%20from%20${encodeURIComponent(contactName || 'Website Visitor')}&body=${encodeURIComponent(contactMessage + '\n\nSender Email: ' + contactEmail)}`;
+      window.location.href = `mailto:sancares87@gmail.com?subject=Synth%20Labs%20Inquiry%20from%20${encodeURIComponent(contactName || 'Visitor')}&body=${encodeURIComponent(contactMessage + '\n\nSender Email: ' + contactEmail)}`;
     }, 800);
   };
 
   return (
     <div className="min-h-screen bg-[#030712] text-slate-100 font-sans selection:bg-emerald-500/30 selection:text-emerald-300">
       
-      {/* 1. TOP LIVE STUDIO STATUS BANNER */}
+      {/* 1. TOP LIVE STATUS BANNER */}
       <div className="bg-[#051c14] border-b border-emerald-800/40 px-4 py-1.5 text-xs text-center text-emerald-400 flex items-center justify-center gap-2">
         <span className="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
         <span>Official Live Studio: <strong className="text-white">synthlabsstudio.com</strong> &bull; Zero-API Client Tools &amp; High-Performance Engineering</span>
       </div>
 
-      {/* 2. STICKY HEADER & NAVBAR */}
+      {/* 2. STICKY NAVBAR */}
       <header className="sticky top-0 z-40 bg-[#030712]/90 backdrop-blur-md border-b border-slate-800/80">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           
@@ -175,7 +187,7 @@ export default function App() {
             </div>
           </a>
 
-          {/* Desktop Navigation Links */}
+          {/* Desktop Nav Links */}
           <nav className="hidden lg:flex items-center gap-6 text-xs text-slate-400 font-medium">
             <a href="#overview" className="hover:text-emerald-400 transition-colors">Home</a>
             <a href="#tools" className="hover:text-emerald-400 transition-colors">Tools Suite</a>
@@ -187,11 +199,11 @@ export default function App() {
             <a href="#contact" className="hover:text-emerald-400 transition-colors">Contact</a>
           </nav>
 
-          {/* Right Action */}
+          {/* Desktop CTA */}
           <div className="hidden lg:flex items-center gap-3">
             <a 
-              href="#pricing"
-              className="px-4 py-2 text-xs font-semibold text-emerald-300 bg-emerald-950/80 border border-emerald-500/30 rounded-lg hover:bg-emerald-900/60 transition-all shadow-sm"
+              href={CHECKOUT_LINKS.synthbudget_pro_embed}
+              className="lemonsqueezy-button px-4 py-2 text-xs font-semibold text-emerald-300 bg-emerald-950/80 border border-emerald-500/30 rounded-lg hover:bg-emerald-900/60 transition-all shadow-sm"
             >
               Get Pro Access
             </a>
@@ -237,7 +249,7 @@ export default function App() {
             <a 
               href="#synthbudget" 
               onClick={() => setMobileMenuOpen(false)} 
-              className="flex items-center gap-2.5 text-sm text-slate-300 hover:text-emerald-400 py-1.5"
+              className="flex items-center gap-2.5 text-xs text-slate-300 hover:text-emerald-400 py-1.5"
             >
               <Smartphone className="w-4 h-4 text-emerald-400" />
               <span>📱 SynthBudget Android App</span>
@@ -277,7 +289,7 @@ export default function App() {
         )}
       </header>
 
-      {/* 3. AD AREA BANNER PLACEHOLDER (Google AdSense Responsive Unit) */}
+      {/* 3. GOOGLE ADSENSE PLACEHOLDER BANNER */}
       <div className="max-w-5xl mx-auto px-4 pt-6">
         <div className="bg-[#050b14] border border-dashed border-slate-800 rounded-xl p-3 text-center flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px] text-slate-500">
           <span className="px-2 py-0.5 rounded bg-slate-900 text-emerald-400 font-mono font-bold uppercase text-[9px]">AD AREA</span>
@@ -362,7 +374,7 @@ export default function App() {
         </div>
       </div>
 
-      {/* 6. INTERACTIVE BROWSER SUITE (ALL 6 CLIENT UTILITIES) */}
+      {/* 6. INTERACTIVE BROWSER SUITE (ALL 6 UTILITIES) */}
       <section id="tools" className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 border-t border-slate-800/80">
         <div className="flex items-center gap-2.5 mb-2">
           <Layers className="w-5 h-5 text-emerald-400" />
@@ -370,7 +382,7 @@ export default function App() {
         </div>
         <p className="text-xs sm:text-sm text-slate-400 mb-6">Select a tool below. Everything runs instant client-side with 0 API cost.</p>
 
-        {/* Tool Tabs */}
+        {/* Tabs */}
         <div className="flex flex-wrap gap-2 mb-6">
           {[
             { id: 'prompt', name: 'Prompt Architect' },
@@ -441,7 +453,6 @@ export default function App() {
               </div>
             </div>
 
-            {/* Compiled Output Block */}
             <div className="mt-4 p-4 rounded-xl bg-[#040811] border border-slate-800 font-mono text-xs text-slate-300">
               <div className="flex justify-between items-center mb-3 pb-2 border-b border-slate-800/80">
                 <span className="text-[10px] uppercase font-bold tracking-wider text-emerald-400">COMPILED OUTPUT</span>
@@ -746,7 +757,7 @@ export default function App() {
         </div>
       </section>
 
-      {/* 8. GUIDES, RESEARCH & TECHNICAL TUTORIALS (ADSENSE CONTENT DEPTH) */}
+      {/* 8. GUIDES, RESEARCH & TECHNICAL TUTORIALS (ADSENSE DEPTH) */}
       <section id="guides" className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 border-t border-slate-800/80">
         <div>
           <h2 className="text-xl sm:text-2xl font-black text-white">Guides, Research &amp; Technical Tutorials</h2>
@@ -810,7 +821,7 @@ export default function App() {
         </div>
       </section>
 
-      {/* 9. ON-DEMAND MICRO SERVICES ($49 - $199) */}
+      {/* 9. ON-DEMAND MICRO SERVICES ($49 - $199 WITH DIRECT CHECKOUT LINKS) */}
       <section id="services" className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 border-t border-slate-800/80">
         <div className="text-center mb-8">
           <h2 className="text-2xl font-black text-white">On-Demand Micro Services</h2>
@@ -818,7 +829,7 @@ export default function App() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* Service 1: $49 */}
+          {/* Service 1: $49 Custom DNS & SSL */}
           <div className="bg-[#070d18] border border-slate-800 rounded-2xl p-6 flex flex-col justify-between hover:border-emerald-500/40 transition-all">
             <div>
               <div className="flex justify-between items-start mb-3">
@@ -832,10 +843,8 @@ export default function App() {
             </div>
             <div className="mt-6 pt-4 border-t border-slate-800/80">
               <a 
-                href={CHECKOUT_LINKS.dns_ssl} 
-                target="_blank" 
-                rel="noreferrer"
-                className="w-full py-2.5 rounded-xl bg-slate-900 border border-slate-700 hover:border-emerald-500/50 hover:bg-emerald-950/40 text-emerald-400 font-bold text-xs flex items-center justify-center gap-2 transition-all"
+                href={CHECKOUT_LINKS.dns_ssl_embed}
+                className="lemonsqueezy-button w-full py-2.5 rounded-xl bg-slate-900 border border-slate-700 hover:border-emerald-500/50 hover:bg-emerald-950/40 text-emerald-400 font-bold text-xs flex items-center justify-center gap-2 transition-all"
               >
                 <span>Book Setup ($49)</span>
                 <ExternalLink className="w-3.5 h-3.5" />
@@ -843,24 +852,22 @@ export default function App() {
             </div>
           </div>
 
-          {/* Service 2: $99 */}
+          {/* Service 2: $99 React & Tailwind UI */}
           <div className="bg-[#070d18] border border-slate-800 rounded-2xl p-6 flex flex-col justify-between hover:border-emerald-500/40 transition-all">
             <div>
               <div className="flex justify-between items-start mb-3">
                 <span className="text-xs uppercase font-bold tracking-wider text-emerald-400">Development</span>
                 <span className="text-2xl font-black text-white">$99</span>
               </div>
-              <h3 className="text-base font-bold text-white mb-2">React / Tailwind UI Component</h3>
+              <h3 className="text-base font-bold text-white mb-2">React / Tailwind UI Development</h3>
               <p className="text-xs text-slate-400 leading-relaxed">
                 Custom client-side single-purpose utility tool, interactive calculator, or responsive frontend component built with React, Vite, and Tailwind CSS.
               </p>
             </div>
             <div className="mt-6 pt-4 border-t border-slate-800/80">
               <a 
-                href={CHECKOUT_LINKS.react_ui} 
-                target="_blank" 
-                rel="noreferrer"
-                className="w-full py-2.5 rounded-xl bg-slate-900 border border-slate-700 hover:border-emerald-500/50 hover:bg-emerald-950/40 text-emerald-400 font-bold text-xs flex items-center justify-center gap-2 transition-all"
+                href={CHECKOUT_LINKS.react_ui_embed}
+                className="lemonsqueezy-button w-full py-2.5 rounded-xl bg-slate-900 border border-slate-700 hover:border-emerald-500/50 hover:bg-emerald-950/40 text-emerald-400 font-bold text-xs flex items-center justify-center gap-2 transition-all"
               >
                 <span>Order UI Component ($99)</span>
                 <ExternalLink className="w-3.5 h-3.5" />
@@ -868,7 +875,7 @@ export default function App() {
             </div>
           </div>
 
-          {/* Service 3: $199 */}
+          {/* Service 3: $199 Core Web Vitals */}
           <div className="bg-[#070d18] border border-slate-800 rounded-2xl p-6 flex flex-col justify-between hover:border-emerald-500/40 transition-all">
             <div>
               <div className="flex justify-between items-start mb-3">
@@ -882,10 +889,8 @@ export default function App() {
             </div>
             <div className="mt-6 pt-4 border-t border-slate-800/80">
               <a 
-                href={CHECKOUT_LINKS.speed_tuning} 
-                target="_blank" 
-                rel="noreferrer"
-                className="w-full py-2.5 rounded-xl bg-slate-900 border border-slate-700 hover:border-emerald-500/50 hover:bg-emerald-950/40 text-emerald-400 font-bold text-xs flex items-center justify-center gap-2 transition-all"
+                href={CHECKOUT_LINKS.speed_tuning_embed}
+                className="lemonsqueezy-button w-full py-2.5 rounded-xl bg-slate-900 border border-slate-700 hover:border-emerald-500/50 hover:bg-emerald-950/40 text-emerald-400 font-bold text-xs flex items-center justify-center gap-2 transition-all"
               >
                 <span>Order Speed Audit ($199)</span>
                 <ExternalLink className="w-3.5 h-3.5" />
@@ -935,7 +940,7 @@ export default function App() {
             </a>
           </div>
 
-          {/* Card 2: SynthBudget Pro (Featured Center Card) */}
+          {/* Card 2: SynthBudget Pro (Direct Lemon Squeezy Modal) */}
           <div className="bg-[#0b1322] border-2 border-emerald-500/80 rounded-3xl p-6 sm:p-8 relative shadow-2xl shadow-emerald-950/50 flex flex-col justify-between md:-translate-y-2">
             <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full bg-emerald-500 text-slate-950 font-bold text-[10px] uppercase tracking-wider">
               Mobile App
@@ -962,10 +967,8 @@ export default function App() {
               </ul>
             </div>
             <a 
-              href={CHECKOUT_LINKS.synthbudget_pro}
-              target="_blank"
-              rel="noreferrer"
-              className="mt-8 w-full py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-bold text-center transition-all shadow-lg shadow-emerald-500/20 block"
+              href={CHECKOUT_LINKS.synthbudget_pro_embed}
+              className="lemonsqueezy-button mt-8 w-full py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-bold text-center transition-all shadow-lg shadow-emerald-500/20 block"
             >
               Explore App Pro
             </a>
@@ -1073,7 +1076,7 @@ export default function App() {
               <span>&copy; {new Date().getFullYear()} synthlabsstudio.com. All rights reserved.</span>
             </div>
             
-            {/* Compliance Footer Links */}
+            {/* Legal & Navigation Footer Links */}
             <div className="flex flex-wrap items-center justify-center gap-4 text-slate-400">
               <a href="#overview" className="hover:text-emerald-400 transition-colors">Home</a>
               <a href="#tools" className="hover:text-emerald-400 transition-colors">Tools</a>
@@ -1095,7 +1098,7 @@ export default function App() {
       </footer>
 
       {/* ========================================================================= */}
-      {/* 13. FULL NATURAL COMPLIANCE MODALS (ADSENSE & POLICY VERIFIED)            */}
+      {/* 13. FULL NATURAL COMPLIANCE MODALS (ADSENSE & LEGAL VERIFIED)             */}
       {/* ========================================================================= */}
 
       {/* ABOUT US MODAL */}
