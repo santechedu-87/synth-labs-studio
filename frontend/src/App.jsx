@@ -1,1327 +1,1196 @@
+```react
 import React, { useState } from 'react';
 import { 
-  Sparkles, 
+  Zap, 
+  Code2, 
   Search, 
   Share2, 
-  BarChart3, 
-  ShieldCheck, 
-  Smartphone, 
-  ArrowRight, 
+  Sliders, 
+  FileCode2, 
+  Calculator, 
   Check, 
-  Copy, 
+  ExternalLink, 
+  Sparkles, 
   Layers, 
-  Zap, 
-  ExternalLink,
-  Code2,
-  Lock,
+  ShieldCheck, 
+  Copy,
   ChevronRight,
   Menu,
   X,
-  CreditCard,
-  FileText,
-  HelpCircle,
   Mail,
-  Send,
-  CheckCircle2,
-  Cpu,
+  ArrowRight,
   BookOpen,
-  Sliders,
-  DollarSign,
-  Globe,
-  Terminal,
-  Activity,
-  Award,
-  Users
+  Info,
+  Scale,
+  Shield,
+  Send,
+  Smartphone,
+  CheckCircle2,
+  Terminal
 } from 'lucide-react';
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState('home'); // 'home', 'tools', 'posts', 'synthbudget', 'services', 'pricing', 'about', 'privacy', 'terms', 'contact'
-  const [activeTool, setActiveTool] = useState('prompt');
+  // Navigation & Drawer
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [copiedState, setCopiedState] = useState('');
-
-  // Tool 1: AI Prompt Engineer
-  const [promptRole, setPromptRole] = useState('Senior SEO Strategist');
-  const [promptTask, setPromptTask] = useState('Build a topical cluster content map with search intent');
-  const [promptTone, setPromptTone] = useState('Clear, data-driven, and authoritative');
-  const [promptAudience, setPromptAudience] = useState('B2B Founders and Content Marketers');
-
-  // Tool 2: SEO SERP Previewer
-  const [metaTitle, setMetaTitle] = useState('Synth Labs Studio | Precision AI Tools & Web Development');
-  const [metaDesc, setMetaDesc] = useState('Practical browser-based micro-tools, custom digital products, and honest growth consulting—built for creators and teams who value clarity over hype.');
-  const [metaSlug, setMetaSlug] = useState('ai-growth-suite');
-
-  // Tool 3: Social Viral Hook Generator
-  const [hookTopic, setHookTopic] = useState('AI workflows for small business owners');
-  const [hookStyle, setHookStyle] = useState('Curiosity Gap');
-  const [generatedHooks, setGeneratedHooks] = useState([
-    "Most business owners waste 15 hours a week doing this manually. Here is the 3-step automated setup:",
-    "Why 90% of AI implementations fail (and the 1 prompt constraint that fixes it):",
-    "Stop buying overpriced SaaS subscriptions. Here is how we built a streamlined workflow in 1 afternoon:"
-  ]);
-
-  // Tool 4: Keyword Density Counter
-  const [densityText, setDensityText] = useState('Synth Labs Studio provides fast digital tools, SEO snippet previewers, and prompt engineering utilities. Our goal is to make web optimization simple and accessible.');
-
-  // Tool 5: JSON Schema & Meta Tag Generator
-  const [schemaName, setSchemaName] = useState('Synth Labs Studio');
-  const [schemaUrl, setSchemaUrl] = useState('https://synthlabsstudio.com');
-  const [schemaDesc, setSchemaDesc] = useState('Precision web tools and modern frontend engineering.');
-  const [schemaType, setSchemaType] = useState('Organization');
-
-  // Tool 6: Budget & Ad ROI Estimator
-  const [monthlyTraffic, setMonthlyTraffic] = useState(25000);
-  const [estimatedCpm, setEstimatedCpm] = useState(3.2);
-  const [appSubscribers, setAppSubscribers] = useState(40);
+  
+  // Active Interactive Tool ('prompt' | 'serp' | 'hooks' | 'keyword' | 'schema' | 'roi')
+  const [activeTool, setActiveTool] = useState('prompt');
+  const [copiedIndex, setCopiedIndex] = useState(null);
+  
+  // Legal & Info Modals: 'about' | 'privacy' | 'terms' | 'contact' | 'guides' | null
+  const [activeModal, setActiveModal] = useState(null);
 
   // Contact Form State
   const [contactName, setContactName] = useState('');
   const [contactEmail, setContactEmail] = useState('');
-  const [contactMsg, setContactMsg] = useState('');
-  const [contactSuccess, setContactSuccess] = useState(false);
+  const [contactMessage, setContactMessage] = useState('');
+  const [contactSent, setContactSent] = useState(false);
 
-  // Calculations
-  const getWordStats = (text) => {
-    const clean = text.toLowerCase().replace(/[^a-zA-Z0-9\s]/g, '');
-    const words = clean.split(/\s+/).filter(w => w.length > 2);
-    const totalWords = words.length;
-    const freq = {};
-    words.forEach(w => { freq[w] = (freq[w] || 0) + 1; });
-    const sorted = Object.entries(freq).sort((a, b) => b[1] - a[1]).slice(0, 6);
-    return { totalWords, topWords: sorted };
+  // =========================================================================
+  // LEMON SQUEEZY CHECKOUT LINKS (Replace with your actual product URLs)
+  // =========================================================================
+  const CHECKOUT_LINKS = {
+    synthbudget_pro: "https://synthlabsstudio.lemonsqueezy.com/buy/product-id-synthbudget", // $4.99/mo subscription
+    dns_ssl: "https://synthlabsstudio.lemonsqueezy.com/buy/product-id-dns-ssl",             // $49 one-time
+    react_ui: "https://synthlabsstudio.lemonsqueezy.com/buy/product-id-react-ui",           // $99 one-time
+    speed_tuning: "https://synthlabsstudio.lemonsqueezy.com/buy/product-id-speed-tuning"    // $199 one-time
   };
 
-  const wordStats = getWordStats(densityText);
+  // --- TOOL 1: PROMPT ARCHITECT STATE ---
+  const [promptPersona, setPromptPersona] = useState('Senior SEO Strategist');
+  const [promptAudience, setPromptAudience] = useState('B2B Founders and Content Marketers');
+  const [promptTask, setPromptTask] = useState('Build a topical cluster content map with search intent');
+  const [promptTone, setPromptTone] = useState('Clear, data-driven, and authoritative');
 
-  const generateNewHooks = () => {
-    if (hookStyle === 'Curiosity Gap') {
-      setGeneratedHooks([
-        `The biggest mistake people make with ${hookTopic.toLowerCase()} (and how to avoid it):`,
-        `I tested 10 different ways to handle ${hookTopic.toLowerCase()}. Here is the only one that worked:`,
-        `Everyone talks about ${hookTopic.toLowerCase()}, but almost no one mentions this critical rule:`
-      ]);
-    } else if (hookStyle === 'Data-Backed') {
-      setGeneratedHooks([
-        `How we improved efficiency by 240% using this structured ${hookTopic.toLowerCase()} framework:`,
-        `5 core metrics you must check before launching any ${hookTopic.toLowerCase()} campaign:`,
-        `Case study: How structured prompts cut turnaround time by 60% in under 7 days:`
-      ]);
-    } else {
-      setGeneratedHooks([
-        `Unpopular opinion: Traditional approaches to ${hookTopic.toLowerCase()} are outdated.`,
-        `Why you should stop overpaying for ${hookTopic.toLowerCase()}:`,
-        `3 simple shifts that completely simplified our approach to ${hookTopic.toLowerCase()}:`
-      ]);
-    }
-  };
+  // --- TOOL 2: SERP PREVIEWER STATE ---
+  const [serpTitle, setSerpTitle] = useState('Synth Labs Studio | Precision AI Tools & Web Development');
+  const [serpUrl, setSerpUrl] = useState('https://www.synthlabsstudio.com');
+  const [serpDesc, setSerpDesc] = useState('Practical browser-based micro-tools, custom digital products, and honest growth consulting built for creators and teams.');
 
-  const handleCopy = (text, id) => {
+  // --- TOOL 3: VIRAL HOOK STUDIO STATE ---
+  const [hookTopic, setHookTopic] = useState('AI workflows for small business owners');
+  const [hookAngle, setHookAngle] = useState('Curiosity Gap');
+  const [generatedHooks, setGeneratedHooks] = useState([
+    "Most business owners waste 15 hours a week doing this manually. Here is the 3-step automated setup:",
+    "Why 90% of AI implementations fail (and the 1 prompt constraint that fixes it):",
+    "Stop buying overpriced SaaS subscriptions. Here is how we built a streamlined workflow in 1 afternoon."
+  ]);
+
+  // --- TOOL 4: KEYWORD DENSITY ANALYZER STATE ---
+  const [kwTarget, setKwTarget] = useState('tools');
+  const [kwText, setKwText] = useState('Synth Labs Studio creates precision browser tools and client side engineering utilities for modern developers and creators.');
+
+  // --- TOOL 5: SCHEMA GENERATOR STATE ---
+  const [appName, setAppName] = useState('Synth Labs Suite');
+  const [schemaType, setSchemaType] = useState('WebApplication');
+
+  // --- TOOL 6: ROI CALCULATOR STATE ---
+  const [hoursSaved, setHoursSaved] = useState(12);
+  const [hourlyRate, setHourlyRate] = useState(45);
+
+  // Helper: Copy to Clipboard
+  const copyToClipboard = (text, index) => {
     const textArea = document.createElement("textarea");
     textArea.value = text;
     document.body.appendChild(textArea);
     textArea.select();
     try {
       document.execCommand('copy');
-      setCopiedState(id);
-      setTimeout(() => setCopiedState(''), 2000);
+      setCopiedIndex(index);
+      setTimeout(() => setCopiedIndex(null), 2000);
     } catch (err) {
-      console.error('Copy fallback failed', err);
+      console.error('Fallback copy failed', err);
     }
     document.body.removeChild(textArea);
   };
 
+  // Helper: Dynamic Hook Generator
+  const handleGenerateHooks = () => {
+    const topic = hookTopic.trim() || 'your current workflow';
+    if (hookAngle === 'Curiosity Gap') {
+      setGeneratedHooks([
+        `The single fatal flaw in most ${topic} setups that nobody is talking about:`,
+        `Why high-performing teams are abandoning traditional methods for ${topic}:`,
+        `How to achieve 10x leverage with ${topic} without paying recurring SaaS fees:`
+      ]);
+    } else if (hookAngle === 'Contrarian') {
+      setGeneratedHooks([
+        `Unpopular opinion: 95% of advice regarding ${topic} is completely obsolete.`,
+        `Stop wasting budget on bloated software for ${topic}. Here is what actually moves the needle:`,
+        `Why lightweight client-side tools beat enterprise packages when tackling ${topic}:`
+      ]);
+    } else {
+      setGeneratedHooks([
+        `Step-by-step blueprint: How we standardized ${topic} in under 30 minutes.`,
+        `The exact production checklist we use for ${topic} every single week:`,
+        `3 zero-cost adjustments to optimize ${topic} starting today:`
+      ]);
+    }
+  };
+
+  // Helper: Keyword Density Calculation
+  const getKeywordMetrics = () => {
+    if (!kwText.trim()) return { count: 0, totalWords: 0, density: 0 };
+    const words = kwText.toLowerCase().match(/\b[a-z0-9'-]+\b/g) || [];
+    const target = kwTarget.toLowerCase().trim();
+    if (!target) return { count: 0, totalWords: words.length, density: 0 };
+    const matches = words.filter(w => w === target || w.includes(target));
+    const density = words.length > 0 ? ((matches.length / words.length) * 100).toFixed(1) : 0;
+    return { count: matches.length, totalWords: words.length, density };
+  };
+
+  const kwMetrics = getKeywordMetrics();
+
+  // Contact Form Submission
   const handleContactSubmit = (e) => {
     e.preventDefault();
-    if (!contactName || !contactEmail) return;
-    setContactSuccess(true);
+    if (!contactEmail.trim() || !contactMessage.trim()) return;
+    setContactSent(true);
     setTimeout(() => {
-      setContactSuccess(false);
-      setContactName('');
-      setContactEmail('');
-      setContactMsg('');
-    }, 4000);
+      window.location.href = `mailto:sancares87@gmail.com?subject=Synth%20Labs%20Inquiry%20from%20${encodeURIComponent(contactName || 'Website Visitor')}&body=${encodeURIComponent(contactMessage + '\n\nSender Email: ' + contactEmail)}`;
+    }, 800);
   };
 
   return (
-    <div className="min-h-screen bg-[#07090e] text-neutral-100 font-sans antialiased selection:bg-emerald-500 selection:text-black flex flex-col justify-between">
+    <div className="min-h-screen bg-[#030712] text-slate-100 font-sans selection:bg-emerald-500/30 selection:text-emerald-300">
       
-      {/* Top Bar Announcement */}
-      <div>
-        <div className="bg-neutral-900/90 border-b border-neutral-800/80 text-xs text-neutral-400 py-2 px-4 text-center">
-          <span className="inline-flex items-center gap-2">
-            <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse"></span>
-            Official Live Studio: <strong className="text-neutral-200">synthlabsstudio.com</strong>
-            <span className="hidden sm:inline text-neutral-600">•</span>
-            <span className="hidden sm:inline text-neutral-400">Zero-API Client Tools & High-Performance Engineering</span>
-          </span>
-        </div>
-
-        {/* Global Navigation Header */}
-        <header className="sticky top-0 z-50 backdrop-blur-xl bg-[#07090e]/90 border-b border-neutral-800/80">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-            
-            {/* Logo */}
-            <div 
-              onClick={() => setActiveTab('home')} 
-              className="flex items-center gap-3 cursor-pointer select-none"
-            >
-              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400 to-teal-600 text-neutral-950 flex items-center justify-center font-black text-lg shadow-lg shadow-emerald-500/20 border border-emerald-300/40">
-                ⚡
-              </div>
-              <div>
-                <span className="font-extrabold tracking-tight text-white block text-base leading-tight">SYNTH LABS</span>
-                <span className="text-[10px] text-emerald-400 font-semibold tracking-wider uppercase">Digital Agency & Tools</span>
-              </div>
-            </div>
-
-            {/* Desktop Nav Items */}
-            <nav className="hidden lg:flex items-center gap-1 bg-neutral-900/60 p-1.5 rounded-2xl border border-neutral-800">
-              <button
-                onClick={() => setActiveTab('home')}
-                className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all ${
-                  activeTab === 'home' ? 'bg-neutral-800 text-emerald-400 shadow-sm' : 'text-neutral-400 hover:text-white'
-                }`}
-              >
-                Home
-              </button>
-              <button
-                onClick={() => setActiveTab('tools')}
-                className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all ${
-                  activeTab === 'tools' ? 'bg-neutral-800 text-emerald-400 shadow-sm' : 'text-neutral-400 hover:text-white'
-                }`}
-              >
-                Tools Suite (6)
-              </button>
-              <button
-                onClick={() => setActiveTab('posts')}
-                className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all ${
-                  activeTab === 'posts' ? 'bg-neutral-800 text-emerald-400 shadow-sm' : 'text-neutral-400 hover:text-white'
-                }`}
-              >
-                Guides & SEO
-              </button>
-              <button
-                onClick={() => setActiveTab('synthbudget')}
-                className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all ${
-                  activeTab === 'synthbudget' ? 'bg-neutral-800 text-emerald-400 shadow-sm' : 'text-neutral-400 hover:text-white'
-                }`}
-              >
-                SynthBudget App
-              </button>
-              <button
-                onClick={() => setActiveTab('services')}
-                className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all ${
-                  activeTab === 'services' ? 'bg-neutral-800 text-emerald-400 shadow-sm' : 'text-neutral-400 hover:text-white'
-                }`}
-              >
-                Agency Services
-              </button>
-              <button
-                onClick={() => setActiveTab('pricing')}
-                className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all ${
-                  activeTab === 'pricing' ? 'bg-neutral-800 text-emerald-400 shadow-sm' : 'text-neutral-400 hover:text-white'
-                }`}
-              >
-                Pricing
-              </button>
-              <button
-                onClick={() => setActiveTab('about')}
-                className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold transition-all ${
-                  activeTab === 'about' ? 'bg-neutral-800 text-emerald-400 shadow-sm' : 'text-neutral-400 hover:text-white'
-                }`}
-              >
-                About
-              </button>
-            </nav>
-
-            <div className="hidden lg:flex items-center gap-3">
-              <button
-                onClick={() => setActiveTab('contact')}
-                className="bg-emerald-400 hover:bg-emerald-300 text-neutral-950 px-4 py-2 rounded-xl text-xs font-bold transition-all shadow-md shadow-emerald-400/20 flex items-center gap-1.5"
-              >
-                Contact Support <ChevronRight className="w-3.5 h-3.5" />
-              </button>
-            </div>
-
-            {/* Mobile Nav Button */}
-            <button 
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden p-2 rounded-xl text-neutral-400 hover:text-white hover:bg-neutral-900 border border-neutral-800"
-            >
-              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-            </button>
-          </div>
-
-          {/* Mobile Menu Dropdown */}
-          {mobileMenuOpen && (
-            <div className="lg:hidden border-b border-neutral-800 bg-[#07090e] px-4 py-4 space-y-1.5">
-              <button
-                onClick={() => { setActiveTab('home'); setMobileMenuOpen(false); }}
-                className={`w-full text-left px-3 py-2 rounded-xl text-sm font-medium ${activeTab === 'home' ? 'bg-neutral-900 text-emerald-400' : 'text-neutral-300'}`}
-              >
-                ⚡ Home Overview
-              </button>
-              <button
-                onClick={() => { setActiveTab('tools'); setMobileMenuOpen(false); }}
-                className={`w-full text-left px-3 py-2 rounded-xl text-sm font-medium ${activeTab === 'tools' ? 'bg-neutral-900 text-emerald-400' : 'text-neutral-300'}`}
-              >
-                🛠 Tools Suite (6 Client Utilities)
-              </button>
-              <button
-                onClick={() => { setActiveTab('posts'); setMobileMenuOpen(false); }}
-                className={`w-full text-left px-3 py-2 rounded-xl text-sm font-medium ${activeTab === 'posts' ? 'bg-neutral-900 text-emerald-400' : 'text-neutral-300'}`}
-              >
-                📖 Guides & Content Documentation
-              </button>
-              <button
-                onClick={() => { setActiveTab('synthbudget'); setMobileMenuOpen(false); }}
-                className={`w-full text-left px-3 py-2 rounded-xl text-sm font-medium ${activeTab === 'synthbudget' ? 'bg-neutral-900 text-emerald-400' : 'text-neutral-300'}`}
-              >
-                📱 SynthBudget Android App
-              </button>
-              <button
-                onClick={() => { setActiveTab('services'); setMobileMenuOpen(false); }}
-                className={`w-full text-left px-3 py-2 rounded-xl text-sm font-medium ${activeTab === 'services' ? 'bg-neutral-900 text-emerald-400' : 'text-neutral-300'}`}
-              >
-                💼 Agency & Micro Services ($49 - $199)
-              </button>
-              <button
-                onClick={() => { setActiveTab('pricing'); setMobileMenuOpen(false); }}
-                className={`w-full text-left px-3 py-2 rounded-xl text-sm font-medium ${activeTab === 'pricing' ? 'bg-neutral-900 text-emerald-400' : 'text-neutral-300'}`}
-              >
-                💳 Pricing & Plans
-              </button>
-              <button
-                onClick={() => { setActiveTab('about'); setMobileMenuOpen(false); }}
-                className={`w-full text-left px-3 py-2 rounded-xl text-sm font-medium ${activeTab === 'about' ? 'bg-neutral-900 text-emerald-400' : 'text-neutral-300'}`}
-              >
-                🏢 About Synth Labs
-              </button>
-              <button
-                onClick={() => { setActiveTab('contact'); setMobileMenuOpen(false); }}
-                className={`w-full text-left px-3 py-2 rounded-xl text-sm font-medium ${activeTab === 'contact' ? 'bg-neutral-900 text-emerald-400' : 'text-neutral-300'}`}
-              >
-                ✉️ Contact & Inquiries
-              </button>
-            </div>
-          )}
-        </header>
-
-        {/* Ad Placement Container (AdSense Header Leaderboard) */}
-        <div className="max-w-6xl mx-auto px-4 pt-4">
-          <div className="w-full py-3.5 px-4 bg-neutral-900/40 border border-dashed border-neutral-800/90 rounded-2xl flex flex-wrap items-center justify-between text-xs text-neutral-500 gap-2">
-            <span className="text-[10px] uppercase font-bold tracking-widest text-emerald-500/80 bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-800/40">
-              Ad Area
-            </span>
-            <span className="text-neutral-400 font-mono text-[11px] text-center">
-              Google AdSense Responsive Unit (Header Leaderboard 728x90 / Mobile 320x50)
-            </span>
-            <span className="text-[10px] text-neutral-600 font-mono">synthlabsstudio.com</span>
-          </div>
-        </div>
-
-        {/* Hero Section */}
-        <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 md:py-16">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            
-            {/* Left Hero Column */}
-            <div className="lg:col-span-7 space-y-6 text-left">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-emerald-950/70 border border-emerald-800/60 text-emerald-400 text-xs font-semibold">
-                <Sparkles className="w-3.5 h-3.5" /> Next-Gen AI & SEO Studio
-              </div>
-              
-              <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight text-white leading-[1.1]">
-                Precision AI Tools <span className="text-emerald-400">•</span> Web Development <span className="text-cyan-400">•</span> Digital Growth
-              </h1>
-
-              <p className="text-neutral-400 text-sm sm:text-base leading-relaxed max-w-2xl">
-                Practical browser-based micro-tools, custom digital products, and honest growth consulting—built for creators and teams who value clarity over hype.
-              </p>
-
-              {/* Action Buttons */}
-              <div className="flex flex-wrap items-center gap-3 pt-2">
-                <button
-                  onClick={() => setActiveTab('tools')}
-                  className="bg-emerald-400 hover:bg-emerald-300 text-neutral-950 px-6 py-3.5 rounded-xl font-extrabold text-sm transition-all shadow-lg shadow-emerald-400/20 flex items-center gap-2"
-                >
-                  Explore Tools Suite <ArrowRight className="w-4 h-4" />
-                </button>
-                <button
-                  onClick={() => setActiveTab('synthbudget')}
-                  className="bg-neutral-900/90 hover:bg-neutral-800 text-neutral-200 border border-neutral-800 px-6 py-3.5 rounded-xl font-bold text-sm transition-all flex items-center gap-2"
-                >
-                  <Smartphone className="w-4 h-4 text-emerald-400" /> Explore SynthBudget App
-                </button>
-              </div>
-
-              {/* Trust Badges */}
-              <div className="flex flex-wrap items-center gap-4 text-xs text-neutral-400 pt-3 border-t border-neutral-800/80">
-                <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-emerald-400" /> 100% Client-Side Processing</span>
-                <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-emerald-400" /> 0 API Charges</span>
-                <span className="flex items-center gap-1.5"><CheckCircle2 className="w-4 h-4 text-emerald-400" /> Verified HTTPS on Vercel</span>
-              </div>
-            </div>
-
-            {/* Right Live Visual Code Window */}
-            <div className="lg:col-span-5">
-              <div className="bg-neutral-900/80 border border-neutral-800 rounded-2xl overflow-hidden shadow-2xl shadow-emerald-950/20">
-                <div className="bg-neutral-950 px-4 py-3 border-b border-neutral-800 flex items-center justify-between">
-                  <div className="flex items-center gap-2">
-                    <span className="w-3 h-3 rounded-full bg-red-500/80 inline-block"></span>
-                    <span className="w-3 h-3 rounded-full bg-amber-500/80 inline-block"></span>
-                    <span className="w-3 h-3 rounded-full bg-emerald-500/80 inline-block"></span>
-                  </div>
-                  <span className="text-[11px] font-mono text-neutral-500">live_tool_preview.sh</span>
-                </div>
-                <div className="p-5 font-mono text-xs text-neutral-300 space-y-3 bg-[#0a0d14]">
-                  <p className="text-neutral-500">// Build a production-ready instruction</p>
-                  <p><span className="text-purple-400 font-semibold">const</span> <span className="text-cyan-300">prompt</span> = <span className="text-emerald-400 font-semibold">engineer</span>({'{'}</p>
-                  <p className="pl-4"><span className="text-neutral-400">role:</span> <span className="text-amber-300">"Senior SEO Strategist"</span>,</p>
-                  <p className="pl-4"><span className="text-neutral-400">task:</span> <span className="text-amber-300">"Build a topical content map"</span>,</p>
-                  <p className="pl-4"><span className="text-neutral-400">tone:</span> <span className="text-amber-300">"Clear, authoritative, useful"</span>,</p>
-                  <p className="pl-4"><span className="text-neutral-400">status:</span> <span className="text-emerald-300">"Prompt ready — 0 API calls"</span></p>
-                  <p>{'})'};</p>
-                  <div className="pt-2 border-t border-neutral-800 flex items-center justify-between text-[11px] text-emerald-400">
-                    <span>✓ Structured prompt generated locally</span>
-                    <span className="text-neutral-500">0ms</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-          </div>
-        </section>
-
-        {/* MAIN PAGE VIEWS */}
-        <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-16">
-          
-          {/* VIEW: HOME & TOOLS SUITE */}
-          {(activeTab === 'home' || activeTab === 'tools') && (
-            <div className="space-y-8">
-              
-              {/* Tool Header & Selector */}
-              <div className="border-b border-neutral-800 pb-5 flex flex-wrap items-center justify-between gap-4">
-                <div>
-                  <h2 className="text-2xl font-bold text-white flex items-center gap-2">
-                    <Layers className="w-6 h-6 text-emerald-400" /> Interactive Browser Suite
-                  </h2>
-                  <p className="text-xs text-neutral-400 mt-1">
-                    Select a tool below. Everything runs instant client-side with 0 API cost.
-                  </p>
-                </div>
-
-                <div className="flex flex-wrap gap-1.5 bg-neutral-900/90 p-1.5 rounded-2xl border border-neutral-800">
-                  <button
-                    onClick={() => setActiveTool('prompt')}
-                    className={`px-3 py-2 rounded-xl text-xs font-semibold transition-all ${
-                      activeTool === 'prompt' ? 'bg-emerald-400 text-neutral-950 shadow-md shadow-emerald-400/20 font-bold' : 'text-neutral-400 hover:text-white'
-                    }`}
-                  >
-                    Prompt Architect
-                  </button>
-                  <button
-                    onClick={() => setActiveTool('serp')}
-                    className={`px-3 py-2 rounded-xl text-xs font-semibold transition-all ${
-                      activeTool === 'serp' ? 'bg-emerald-400 text-neutral-950 shadow-md shadow-emerald-400/20 font-bold' : 'text-neutral-400 hover:text-white'
-                    }`}
-                  >
-                    SERP Previewer
-                  </button>
-                  <button
-                    onClick={() => setActiveTool('hooks')}
-                    className={`px-3 py-2 rounded-xl text-xs font-semibold transition-all ${
-                      activeTool === 'hooks' ? 'bg-emerald-400 text-neutral-950 shadow-md shadow-emerald-400/20 font-bold' : 'text-neutral-400 hover:text-white'
-                    }`}
-                  >
-                    Viral Hook Studio
-                  </button>
-                  <button
-                    onClick={() => setActiveTool('density')}
-                    className={`px-3 py-2 rounded-xl text-xs font-semibold transition-all ${
-                      activeTool === 'density' ? 'bg-emerald-400 text-neutral-950 shadow-md shadow-emerald-400/20 font-bold' : 'text-neutral-400 hover:text-white'
-                    }`}
-                  >
-                    Keyword Density
-                  </button>
-                  <button
-                    onClick={() => setActiveTool('schema')}
-                    className={`px-3 py-2 rounded-xl text-xs font-semibold transition-all ${
-                      activeTool === 'schema' ? 'bg-emerald-400 text-neutral-950 shadow-md shadow-emerald-400/20 font-bold' : 'text-neutral-400 hover:text-white'
-                    }`}
-                  >
-                    Schema Generator
-                  </button>
-                  <button
-                    onClick={() => setActiveTool('estimator')}
-                    className={`px-3 py-2 rounded-xl text-xs font-semibold transition-all ${
-                      activeTool === 'estimator' ? 'bg-emerald-400 text-neutral-950 shadow-md shadow-emerald-400/20 font-bold' : 'text-neutral-400 hover:text-white'
-                    }`}
-                  >
-                    ROI Calculator
-                  </button>
-                </div>
-              </div>
-
-              {/* TOOL 1: PROMPT ARCHITECT */}
-              {activeTool === 'prompt' && (
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-                  <div className="lg:col-span-6 bg-neutral-900/60 border border-neutral-800 rounded-3xl p-6 space-y-4">
-                    <h3 className="text-base font-bold text-white flex items-center justify-between">
-                      <span>System Prompt Architect</span>
-                      <span className="text-[10px] bg-emerald-950 text-emerald-400 border border-emerald-800 px-2.5 py-0.5 rounded-full font-mono">
-                        Universal LLM
-                      </span>
-                    </h3>
-
-                    <div>
-                      <label className="block text-xs font-semibold text-neutral-400 mb-1.5">Target AI Persona / Role</label>
-                      <input
-                        type="text"
-                        value={promptRole}
-                        onChange={(e) => setPromptRole(e.target.value)}
-                        className="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-4 py-2.5 text-xs text-neutral-200 focus:outline-none focus:border-emerald-400 font-mono"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-xs font-semibold text-neutral-400 mb-1.5">Target Audience & Intent</label>
-                      <input
-                        type="text"
-                        value={promptAudience}
-                        onChange={(e) => setPromptAudience(e.target.value)}
-                        className="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-4 py-2.5 text-xs text-neutral-200 focus:outline-none focus:border-emerald-400 font-mono"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-xs font-semibold text-neutral-400 mb-1.5">Task Instructions & Constraints</label>
-                      <textarea
-                        rows={3}
-                        value={promptTask}
-                        onChange={(e) => setPromptTask(e.target.value)}
-                        className="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-4 py-2.5 text-xs text-neutral-200 focus:outline-none focus:border-emerald-400 resize-none font-mono"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block text-xs font-semibold text-neutral-400 mb-1.5">Tone & Formatting Style</label>
-                      <input
-                        type="text"
-                        value={promptTone}
-                        onChange={(e) => setPromptTone(e.target.value)}
-                        className="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-4 py-2.5 text-xs text-neutral-200 focus:outline-none focus:border-emerald-400 font-mono"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="lg:col-span-6 bg-neutral-900/90 border border-neutral-800 rounded-3xl p-6 space-y-4">
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs font-bold text-emerald-400 uppercase tracking-wider">Compiled Output</span>
-                      <button
-                        onClick={() => handleCopy(`Act as a ${promptRole}.\n\nTarget Audience: ${promptAudience}\n\nTask:\n${promptTask}\n\nTone & Style:\n${promptTone}\n\nOutput Guidelines:\n- Structure your response using markdown headings and bullet points.\n- Eliminate introductory conversational filler.`, 'prompt')}
-                        className="text-xs flex items-center gap-1.5 text-neutral-300 hover:text-white bg-neutral-800 px-3.5 py-1.5 rounded-xl border border-neutral-700 font-semibold transition-colors"
-                      >
-                        {copiedState === 'prompt' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
-                        {copiedState === 'prompt' ? 'Copied Prompt!' : 'Copy Prompt'}
-                      </button>
-                    </div>
-
-                    <pre className="bg-neutral-950 p-5 rounded-2xl text-xs text-neutral-300 font-mono whitespace-pre-wrap border border-neutral-800 leading-relaxed overflow-x-auto">
-{`Act as a ${promptRole}.
-
-Target Audience:
-${promptAudience}
-
-Task:
-${promptTask}
-
-Tone & Style:
-${promptTone}
-
-Output Guidelines:
-- Structure your response using markdown headings and bullet points.
-- Eliminate introductory conversational filler.`}
-                    </pre>
-
-                    <div className="text-[11px] text-neutral-500 pt-2 border-t border-neutral-800 flex items-center justify-between">
-                      <span>Ready for GPT-4o, Claude 3.5 Sonnet, & Gemini Pro</span>
-                      <span className="text-emerald-400 font-mono">Instant local compile</span>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* TOOL 2: SERP PREVIEWER */}
-              {activeTool === 'serp' && (
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-                  <div className="lg:col-span-6 bg-neutral-900/60 border border-neutral-800 rounded-3xl p-6 space-y-4">
-                    <h3 className="text-base font-bold text-white">Google SERP Snippet Previewer</h3>
-
-                    <div>
-                      <div className="flex justify-between text-xs mb-1.5">
-                        <span className="text-neutral-400 font-semibold">Page Title</span>
-                        <span className={`${metaTitle.length > 60 ? 'text-amber-400' : 'text-neutral-500'}`}>
-                          {metaTitle.length}/60 chars
-                        </span>
-                      </div>
-                      <input
-                        type="text"
-                        value={metaTitle}
-                        onChange={(e) => setMetaTitle(e.target.value)}
-                        className="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-4 py-2.5 text-xs text-neutral-200 focus:outline-none focus:border-emerald-400"
-                      />
-                    </div>
-
-                    <div>
-                      <div className="flex justify-between text-xs mb-1.5">
-                        <span className="text-neutral-400 font-semibold">URL Path Slug</span>
-                        <span className="text-neutral-500">synthlabsstudio.com/{metaSlug}</span>
-                      </div>
-                      <input
-                        type="text"
-                        value={metaSlug}
-                        onChange={(e) => setMetaSlug(e.target.value.toLowerCase().replace(/\s+/g, '-'))}
-                        className="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-4 py-2.5 text-xs text-neutral-200 focus:outline-none focus:border-emerald-400"
-                      />
-                    </div>
-
-                    <div>
-                      <div className="flex justify-between text-xs mb-1.5">
-                        <span className="text-neutral-400 font-semibold">Meta Description</span>
-                        <span className={`${metaDesc.length > 160 ? 'text-amber-400' : 'text-neutral-500'}`}>
-                          {metaDesc.length}/160 chars
-                        </span>
-                      </div>
-                      <textarea
-                        rows={3}
-                        value={metaDesc}
-                        onChange={(e) => setMetaDesc(e.target.value)}
-                        className="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-4 py-2.5 text-xs text-neutral-200 focus:outline-none focus:border-emerald-400 resize-none"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="lg:col-span-6 bg-neutral-900/90 border border-neutral-800 rounded-3xl p-6 space-y-4">
-                    <span className="text-xs font-bold text-neutral-400 uppercase tracking-wider block">Live Google SERP Appearance</span>
-                    <div className="bg-[#12151c] p-5 rounded-2xl border border-neutral-800 space-y-2 font-sans shadow-inner">
-                      <div className="flex items-center gap-2 text-xs text-neutral-400">
-                        <div className="w-5 h-5 rounded-full bg-neutral-800 flex items-center justify-center text-[10px]">🌐</div>
-                        <span className="text-neutral-200 font-medium">https://synthlabsstudio.com</span>
-                        <span className="text-neutral-500">› {metaSlug}</span>
-                      </div>
-                      <h4 className="text-blue-400 hover:underline cursor-pointer text-base font-semibold line-clamp-1">
-                        {metaTitle || 'Synth Labs Studio'}
-                      </h4>
-                      <p className="text-xs text-neutral-400 leading-relaxed line-clamp-2">
-                        {metaDesc || 'Enter your custom meta description to test Google search snippet presentation in real time.'}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* TOOL 3: VIRAL HOOKS */}
-              {activeTool === 'hooks' && (
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-                  <div className="lg:col-span-6 bg-neutral-900/60 border border-neutral-800 rounded-3xl p-6 space-y-4">
-                    <h3 className="text-base font-bold text-white">Viral Content Hook Generator</h3>
-                    <div>
-                      <label className="block text-xs font-semibold text-neutral-400 mb-1.5">Topic / Problem Statement</label>
-                      <input
-                        type="text"
-                        value={hookTopic}
-                        onChange={(e) => setHookTopic(e.target.value)}
-                        className="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-4 py-2.5 text-xs text-neutral-200 focus:outline-none focus:border-emerald-400"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-semibold text-neutral-400 mb-1.5">Psychological Hook Angle</label>
-                      <select
-                        value={hookStyle}
-                        onChange={(e) => setHookStyle(e.target.value)}
-                        className="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-4 py-2.5 text-xs text-neutral-200 focus:outline-none focus:border-emerald-400"
-                      >
-                        <option>Curiosity Gap</option>
-                        <option>Data-Backed</option>
-                        <option>Contrarian</option>
-                      </select>
-                    </div>
-                    <button
-                      onClick={generateNewHooks}
-                      className="w-full bg-emerald-400 hover:bg-emerald-300 text-neutral-950 font-bold py-3 rounded-xl text-xs transition-all shadow-md shadow-emerald-400/20 flex items-center justify-center gap-2"
-                    >
-                      <Zap className="w-4 h-4" /> Generate Fresh Angles
-                    </button>
-                  </div>
-
-                  <div className="lg:col-span-6 bg-neutral-900/90 border border-neutral-800 rounded-3xl p-6 space-y-3">
-                    <span className="text-xs font-bold text-neutral-400 uppercase tracking-wider block">Generated Angles for Social & Blogs</span>
-                    {generatedHooks.map((h, i) => (
-                      <div key={i} className="bg-neutral-950 p-4 rounded-2xl border border-neutral-800 flex items-center justify-between gap-3 text-xs text-neutral-300">
-                        <span className="leading-relaxed font-medium">"{h}"</span>
-                        <button
-                          onClick={() => handleCopy(h, `hook-${i}`)}
-                          className="text-neutral-500 hover:text-emerald-400 shrink-0 p-1.5 bg-neutral-900 rounded-lg border border-neutral-800 transition-colors"
-                        >
-                          {copiedState === `hook-${i}` ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* TOOL 4: KEYWORD DENSITY */}
-              {activeTool === 'density' && (
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-                  <div className="lg:col-span-6 bg-neutral-900/60 border border-neutral-800 rounded-3xl p-6 space-y-4">
-                    <h3 className="text-base font-bold text-white">Content Keyword Density Analyzer</h3>
-                    <textarea
-                      rows={6}
-                      value={densityText}
-                      onChange={(e) => setDensityText(e.target.value)}
-                      placeholder="Paste article, description, or content body..."
-                      className="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-4 py-2.5 text-xs text-neutral-200 focus:outline-none focus:border-emerald-400 resize-none font-sans leading-relaxed"
-                    />
-                  </div>
-                  <div className="lg:col-span-6 bg-neutral-900/90 border border-neutral-800 rounded-3xl p-6 space-y-4">
-                    <div className="flex justify-between items-center">
-                      <span className="text-xs font-bold text-neutral-400 uppercase tracking-wider">Frequency Summary</span>
-                      <span className="text-xs bg-neutral-800 text-emerald-400 px-3 py-1 rounded-full font-mono font-bold">
-                        {wordStats.totalWords} Total Significant Words
-                      </span>
-                    </div>
-                    <div className="space-y-2">
-                      {wordStats.topWords.map(([w, c], i) => {
-                        const pct = ((c / (wordStats.totalWords || 1)) * 100).toFixed(1);
-                        return (
-                          <div key={i} className="bg-neutral-950 p-3 rounded-xl border border-neutral-800/90 flex items-center justify-between text-xs">
-                            <span className="font-mono text-neutral-200 capitalize font-medium">"{w}"</span>
-                            <span className="text-neutral-400 font-mono">{c} times ({pct}%)</span>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* TOOL 5: SCHEMA GENERATOR */}
-              {activeTool === 'schema' && (
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-                  <div className="lg:col-span-6 bg-neutral-900/60 border border-neutral-800 rounded-3xl p-6 space-y-4">
-                    <h3 className="text-base font-bold text-white">Structured JSON-LD Schema Generator</h3>
-                    <div>
-                      <label className="block text-xs font-semibold text-neutral-400 mb-1.5">Schema Entity Type</label>
-                      <select
-                        value={schemaType}
-                        onChange={(e) => setSchemaType(e.target.value)}
-                        className="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-4 py-2.5 text-xs text-neutral-200 focus:outline-none focus:border-emerald-400"
-                      >
-                        <option>Organization</option>
-                        <option>WebSite</option>
-                        <option>SoftwareApplication</option>
-                      </select>
-                    </div>
-                    <div>
-                      <label className="block text-xs font-semibold text-neutral-400 mb-1.5">Entity / Brand Name</label>
-                      <input
-                        type="text"
-                        value={schemaName}
-                        onChange={(e) => setSchemaName(e.target.value)}
-                        className="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-4 py-2.5 text-xs text-neutral-200 focus:outline-none focus:border-emerald-400"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-semibold text-neutral-400 mb-1.5">Canonical Domain URL</label>
-                      <input
-                        type="text"
-                        value={schemaUrl}
-                        onChange={(e) => setSchemaUrl(e.target.value)}
-                        className="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-4 py-2.5 text-xs text-neutral-200 focus:outline-none focus:border-emerald-400"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-xs font-semibold text-neutral-400 mb-1.5">Entity Description</label>
-                      <input
-                        type="text"
-                        value={schemaDesc}
-                        onChange={(e) => setSchemaDesc(e.target.value)}
-                        className="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-4 py-2.5 text-xs text-neutral-200 focus:outline-none focus:border-emerald-400"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="lg:col-span-6 bg-neutral-900/90 border border-neutral-800 rounded-3xl p-6 space-y-4">
-                    <div className="flex items-center justify-between">
-                      <span className="text-xs font-bold text-emerald-400 uppercase tracking-wider">Valid JSON-LD Markup</span>
-                      <button
-                        onClick={() => handleCopy(`<script type="application/ld+json">\n${JSON.stringify({
-                          "@context": "https://schema.org",
-                          "@type": schemaType,
-                          "name": schemaName,
-                          "url": schemaUrl,
-                          "description": schemaDesc
-                        }, null, 2)}\n</script>`, 'schema')}
-                        className="text-xs flex items-center gap-1.5 text-neutral-300 hover:text-white bg-neutral-800 px-3.5 py-1.5 rounded-xl border border-neutral-700 font-semibold"
-                      >
-                        {copiedState === 'schema' ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
-                        {copiedState === 'schema' ? 'Copied' : 'Copy Schema'}
-                      </button>
-                    </div>
-                    <pre className="bg-neutral-950 p-5 rounded-2xl text-xs text-neutral-300 font-mono whitespace-pre-wrap border border-neutral-800 leading-relaxed overflow-x-auto">
-{`<script type="application/ld+json">
-${JSON.stringify({
-  "@context": "https://schema.org",
-  "@type": schemaType,
-  "name": schemaName,
-  "url": schemaUrl,
-  "description": schemaDesc
-}, null, 2)}
-</script>`}
-                    </pre>
-                  </div>
-                </div>
-              )}
-
-              {/* TOOL 6: ROI ESTIMATOR */}
-              {activeTool === 'estimator' && (
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-                  <div className="lg:col-span-6 bg-neutral-900/60 border border-neutral-800 rounded-3xl p-6 space-y-5">
-                    <h3 className="text-base font-bold text-white">AdSense, AdMob & App Revenue Forecast</h3>
-                    <div>
-                      <div className="flex justify-between text-xs mb-2">
-                        <span className="text-neutral-400">Monthly Website Traffic (Pageviews):</span>
-                        <span className="font-mono text-emerald-400 font-bold">{monthlyTraffic.toLocaleString()}</span>
-                      </div>
-                      <input
-                        type="range"
-                        min="1000"
-                        max="250000"
-                        step="2500"
-                        value={monthlyTraffic}
-                        onChange={(e) => setMonthlyTraffic(Number(e.target.value))}
-                        className="w-full accent-emerald-400 h-2 bg-neutral-800 rounded-lg cursor-pointer"
-                      />
-                    </div>
-                    <div>
-                      <div className="flex justify-between text-xs mb-2">
-                        <span className="text-neutral-400">Estimated Average CPM ($):</span>
-                        <span className="font-mono text-emerald-400 font-bold">${estimatedCpm.toFixed(2)}</span>
-                      </div>
-                      <input
-                        type="range"
-                        min="0.5"
-                        max="10"
-                        step="0.25"
-                        value={estimatedCpm}
-                        onChange={(e) => setEstimatedCpm(Number(e.target.value))}
-                        className="w-full accent-emerald-400 h-2 bg-neutral-800 rounded-lg cursor-pointer"
-                      />
-                    </div>
-                    <div>
-                      <div className="flex justify-between text-xs mb-2">
-                        <span className="text-neutral-400">SynthBudget App Pro Subscribers ($4.99/mo):</span>
-                        <span className="font-mono text-emerald-400 font-bold">{appSubscribers} users</span>
-                      </div>
-                      <input
-                        type="range"
-                        min="0"
-                        max="300"
-                        step="5"
-                        value={appSubscribers}
-                        onChange={(e) => setAppSubscribers(Number(e.target.value))}
-                        className="w-full accent-emerald-400 h-2 bg-neutral-800 rounded-lg cursor-pointer"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="lg:col-span-6 bg-neutral-900/90 border border-neutral-800 rounded-3xl p-6 space-y-4">
-                    <span className="text-xs font-bold text-neutral-400 uppercase tracking-wider block">Projected Monthly Digital Income</span>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="bg-neutral-950 p-5 rounded-2xl border border-neutral-800 text-center">
-                        <span className="text-[11px] text-neutral-500 block">AdSense Web CPM</span>
-                        <span className="text-2xl font-black text-white">
-                          ${((monthlyTraffic / 1000) * estimatedCpm).toFixed(2)}
-                        </span>
-                      </div>
-                      <div className="bg-neutral-950 p-5 rounded-2xl border border-neutral-800 text-center">
-                        <span className="text-[11px] text-neutral-500 block">Mobile App Pro</span>
-                        <span className="text-2xl font-black text-white">
-                          ${(appSubscribers * 4.99).toFixed(2)}
-                        </span>
-                      </div>
-                    </div>
-                    <div className="bg-emerald-950/40 border border-emerald-800/80 p-5 rounded-2xl text-center shadow-lg shadow-emerald-500/5">
-                      <span className="text-xs text-emerald-400 font-bold uppercase tracking-wider block">Combined Recurring Income</span>
-                      <span className="text-3xl font-black text-emerald-300">
-                        ${(((monthlyTraffic / 1000) * estimatedCpm) + (appSubscribers * 4.99)).toFixed(2)}/mo
-                      </span>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-            </div>
-          )}
-
-          {/* VIEW: ARTICLES & GUIDES (FULL ADSENSE VALUE CONTENT) */}
-          {activeTab === 'posts' && (
-            <div className="space-y-8 max-w-4xl mx-auto">
-              <div className="border-b border-neutral-800 pb-4">
-                <h2 className="text-2xl font-extrabold text-white">Guides, Research & Technical Tutorials</h2>
-                <p className="text-xs text-neutral-400 mt-1">
-                  In-depth documentation covering algorithmic prompt design, Core Web Vitals, and scalable monetization architectures.
-                </p>
-              </div>
-
-              <div className="space-y-6">
-                
-                {/* Article 1 */}
-                <article className="bg-neutral-900/60 border border-neutral-800 rounded-3xl p-8 space-y-4">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[11px] font-mono text-emerald-400 uppercase tracking-wider bg-emerald-950 px-3 py-1 rounded-full border border-emerald-800/60 font-semibold">
-                      Prompt Engineering • 6 Min Read
-                    </span>
-                    <span className="text-xs text-neutral-500 font-mono">Updated: 2026</span>
-                  </div>
-                  <h3 className="text-xl font-extrabold text-white">
-                    How System Constraints and Persona Framing Prevent LLM Hallucinations
-                  </h3>
-                  <p className="text-xs text-neutral-300 leading-relaxed">
-                    Large language models (LLMs) operate probabilistically, generating next-token completions based on statistical weights. When prompts are vague or open-ended, the model fills context gaps with plausible-sounding inaccuracies.
-                  </p>
-                  <div className="bg-neutral-950 p-4 rounded-xl border border-neutral-800/80 text-xs text-neutral-400 space-y-2">
-                    <div className="font-bold text-neutral-200">The 3 Structural Rules for Reliable Outputs:</div>
-                    <ul className="list-disc list-inside space-y-1 text-[11px] text-neutral-300">
-                      <li><strong>Negative Constraints:</strong> Explicitly forbid conversational fluff (e.g., "Do not include introductory commentary").</li>
-                      <li><strong>Schema Definition:</strong> Force outputs into Markdown tables, bullet lists, or valid JSON payloads.</li>
-                      <li><strong>Domain Calibration:</strong> Assign a specific senior persona to narrow the probability distribution of generated tokens.</li>
-                    </ul>
-                  </div>
-                </article>
-
-                {/* Article 2 */}
-                <article className="bg-neutral-900/60 border border-neutral-800 rounded-3xl p-8 space-y-4">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[11px] font-mono text-cyan-400 uppercase tracking-wider bg-cyan-950 px-3 py-1 rounded-full border border-cyan-800/60 font-semibold">
-                      Technical SEO • 5 Min Read
-                    </span>
-                    <span className="text-xs text-neutral-500 font-mono">Updated: 2026</span>
-                  </div>
-                  <h3 className="text-xl font-extrabold text-white">
-                    Mastering Core Web Vitals for React Single Page Applications
-                  </h3>
-                  <p className="text-xs text-neutral-300 leading-relaxed">
-                    Single Page Applications (SPAs) built with React or Vite provide fast client interactions, but without careful asset loading, they risk failing Google's Largest Contentful Paint (LCP) and Cumulative Layout Shift (CLS) thresholds.
-                  </p>
-                  <div className="bg-neutral-950 p-4 rounded-xl border border-neutral-800/80 text-xs text-neutral-400 space-y-2">
-                    <div className="font-bold text-neutral-200">Core Optimization Techniques Applied on Synth Labs:</div>
-                    <ul className="list-disc list-inside space-y-1 text-[11px] text-neutral-300">
-                      <li><strong>Preconnecting Google Fonts:</strong> Eliminates font rendering delay during initial page load.</li>
-                      <li><strong>Zero-Dependency Client State:</strong> Reduces bundle payloads by executing parsing locally inside standard Web APIs.</li>
-                      <li><strong>Edge CDN Hosting:</strong> Utilizing Anycast Vercel Edge networks to deliver sub-100ms TTFB globally.</li>
-                    </ul>
-                  </div>
-                </article>
-
-                {/* Article 3 */}
-                <article className="bg-neutral-900/60 border border-neutral-800 rounded-3xl p-8 space-y-4">
-                  <div className="flex items-center justify-between">
-                    <span className="text-[11px] font-mono text-indigo-400 uppercase tracking-wider bg-indigo-950 px-3 py-1 rounded-full border border-indigo-800/60 font-semibold">
-                      Monetization • 8 Min Read
-                    </span>
-                    <span className="text-xs text-neutral-500 font-mono">Updated: 2026</span>
-                  </div>
-                  <h3 className="text-xl font-extrabold text-white">
-                    The Modern Hybrid Revenue Blueprint: AdSense + AdMob + Micro-Services
-                  </h3>
-                  <p className="text-xs text-neutral-300 leading-relaxed">
-                    Relying exclusively on client freelance work produces unpredictable revenue fluctuations. By integrating web-based utility traffic with Google AdSense, Android mobile applications powered by AdMob, and micro-service consulting packages, modern digital builders create resilient multi-stream income engines.
-                  </p>
-                </article>
-
-              </div>
-            </div>
-          )}
-
-          {/* VIEW: SYNTHBUDGET APP */}
-          {activeTab === 'synthbudget' && (
-            <div className="max-w-4xl mx-auto bg-neutral-900/50 border border-neutral-800 rounded-3xl p-8 sm:p-12 space-y-8">
-              <div className="space-y-3">
-                <span className="text-xs bg-emerald-950 border border-emerald-800 text-emerald-400 px-3 py-1 rounded-full font-semibold">
-                  Mobile Product in Active Testing
-                </span>
-                <h2 className="text-3xl font-black text-white">SynthBudget Android App</h2>
-                <p className="text-xs sm:text-sm text-neutral-400 leading-relaxed max-w-2xl">
-                  Intelligent expense tracker, cashflow analyzer, and budget forecaster engineered for privacy-conscious individuals and freelancers.
-                </p>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
-                <div className="space-y-3">
-                  <div className="flex items-center gap-3 text-xs text-neutral-300">
-                    <Check className="w-4 h-4 text-emerald-400 shrink-0" /> Fast offline-first entry with instant local SQLite storage
-                  </div>
-                  <div className="flex items-center gap-3 text-xs text-neutral-300">
-                    <Check className="w-4 h-4 text-emerald-400 shrink-0" /> Automated cashflow breakdown and predictive month-end balance
-                  </div>
-                  <div className="flex items-center gap-3 text-xs text-neutral-300">
-                    <Check className="w-4 h-4 text-emerald-400 shrink-0" /> Optional ad-free subscription ($4.99/mo) with cloud backup
-                  </div>
-                  <div className="pt-3">
-                    <button 
-                      onClick={() => setActiveTab('pricing')}
-                      className="bg-emerald-400 hover:bg-emerald-300 text-neutral-950 px-5 py-2.5 rounded-xl font-bold text-xs transition-all shadow-md shadow-emerald-400/20"
-                    >
-                      View Subscription Pricing
-                    </button>
-                  </div>
-                </div>
-
-                <div className="bg-neutral-950 border border-neutral-800 rounded-2xl p-6 text-center space-y-3">
-                  <div className="text-4xl">📱</div>
-                  <h4 className="text-sm font-bold text-white">Google Play Store Closed Testing</h4>
-                  <p className="text-xs text-neutral-400">
-                    The app is undergoing closed tester group review. The direct Google Play Store download link will be published here upon completion of store compliance.
-                  </p>
-                  <div className="inline-block text-[11px] font-mono text-emerald-400 bg-emerald-950/80 px-3.5 py-1 rounded-full border border-emerald-800/60">
-                    Target: Google Play Store Release
-                  </div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* VIEW: ACCESSIBLE SERVICES */}
-          {activeTab === 'services' && (
-            <div className="space-y-8 max-w-5xl mx-auto">
-              <div>
-                <h2 className="text-2xl font-black text-white">Accessible Micro-Engineering Services</h2>
-                <p className="text-xs text-neutral-400 mt-1">
-                  Honest, transparent pricing for domain configuration, SEO audits, and custom web builds.
-                </p>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="bg-neutral-900/60 border border-neutral-800 rounded-3xl p-6 flex flex-col justify-between space-y-4">
-                  <div className="space-y-3">
-                    <div className="w-10 h-10 rounded-2xl bg-emerald-950 border border-emerald-800/80 flex items-center justify-center text-emerald-400 font-extrabold text-sm">
-                      $49
-                    </div>
-                    <h3 className="text-base font-bold text-white">DNS & Domain Integration</h3>
-                    <p className="text-xs text-neutral-400 leading-relaxed">
-                      Complete custom domain linking, SSL verification, Vercel/GitHub integration, and Namecheap DNS configuration.
-                    </p>
-                  </div>
-                  <button onClick={() => setActiveTab('contact')} className="w-full py-2.5 rounded-xl bg-neutral-800 hover:bg-neutral-700 text-xs font-semibold text-white border border-neutral-700 transition-colors">
-                    Request DNS Setup
-                  </button>
-                </div>
-
-                <div className="bg-neutral-900/60 border border-neutral-800 rounded-3xl p-6 flex flex-col justify-between space-y-4">
-                  <div className="space-y-3">
-                    <div className="w-10 h-10 rounded-2xl bg-cyan-950 border border-cyan-800/80 flex items-center justify-center text-cyan-400 font-extrabold text-sm">
-                      $99
-                    </div>
-                    <h3 className="text-base font-bold text-white">SEO & Performance Audit</h3>
-                    <p className="text-xs text-neutral-400 leading-relaxed">
-                      Detailed Core Web Vitals report, title and description optimization, structured JSON-LD schema setup, and Google indexing review.
-                    </p>
-                  </div>
-                  <button onClick={() => setActiveTab('contact')} className="w-full py-2.5 rounded-xl bg-neutral-800 hover:bg-neutral-700 text-xs font-semibold text-white border border-neutral-700 transition-colors">
-                    Request SEO Audit
-                  </button>
-                </div>
-
-                <div className="bg-neutral-900/60 border border-neutral-800 rounded-3xl p-6 flex flex-col justify-between space-y-4">
-                  <div className="space-y-3">
-                    <div className="w-10 h-10 rounded-2xl bg-indigo-950 border border-indigo-800/80 flex items-center justify-center text-indigo-400 font-extrabold text-sm">
-                      $199
-                    </div>
-                    <h3 className="text-base font-bold text-white">Single-Page React App</h3>
-                    <p className="text-xs text-neutral-400 leading-relaxed">
-                      Fully responsive, high-speed landing page built with React and Tailwind CSS, tailored for modern web utility tools or app releases.
-                    </p>
-                  </div>
-                  <button onClick={() => setActiveTab('contact')} className="w-full py-2.5 rounded-xl bg-neutral-800 hover:bg-neutral-700 text-xs font-semibold text-white border border-neutral-700 transition-colors">
-                    Order Landing Page
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* VIEW: PRICING */}
-          {activeTab === 'pricing' && (
-            <div className="space-y-8 max-w-5xl mx-auto">
-              <div className="text-center space-y-2">
-                <h2 className="text-3xl font-black text-white">Clear & Honest Pricing Tiers</h2>
-                <p className="text-xs text-neutral-400">
-                  Select free browser utilities, affordable micro-services, or app subscriptions.
-                </p>
-              </div>
-
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-stretch">
-                {/* Free Tier */}
-                <div className="bg-neutral-900/50 border border-neutral-800 rounded-3xl p-6 flex flex-col justify-between space-y-6">
-                  <div className="space-y-4">
-                    <span className="text-xs font-bold text-neutral-400 uppercase">Starter Tools</span>
-                    <div>
-                      <span className="text-3xl font-black text-white">$0</span>
-                      <span className="text-xs text-neutral-500 ml-1">/ lifetime</span>
-                    </div>
-                    <ul className="space-y-2 text-xs text-neutral-300">
-                      <li className="flex items-center gap-2"><Check className="w-3.5 h-3.5 text-emerald-400 shrink-0" /> All 6 browser tools</li>
-                      <li className="flex items-center gap-2"><Check className="w-3.5 h-3.5 text-emerald-400 shrink-0" /> No account creation needed</li>
-                      <li className="flex items-center gap-2"><Check className="w-3.5 h-3.5 text-emerald-400 shrink-0" /> Ad-supported experience</li>
-                    </ul>
-                  </div>
-                  <button
-                    onClick={() => setActiveTab('tools')}
-                    className="w-full py-2.5 rounded-xl border border-neutral-700 bg-neutral-800 hover:bg-neutral-700 text-xs font-bold text-white transition-all"
-                  >
-                    Use Free Tools
-                  </button>
-                </div>
-
-                {/* SynthBudget Pro */}
-                <div className="bg-neutral-900 border-2 border-emerald-500/80 rounded-3xl p-6 flex flex-col justify-between space-y-6 relative shadow-xl shadow-emerald-500/10">
-                  <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-emerald-400 text-neutral-950 font-black text-[10px] uppercase tracking-wider px-3.5 py-0.5 rounded-full">
-                    Mobile App
-                  </div>
-                  <div className="space-y-4 pt-2">
-                    <span className="text-xs font-bold text-emerald-400 uppercase">SynthBudget Pro</span>
-                    <div>
-                      <span className="text-3xl font-black text-white">$4.99</span>
-                      <span className="text-xs text-neutral-500 ml-1">/ month</span>
-                    </div>
-                    <ul className="space-y-2 text-xs text-neutral-300">
-                      <li className="flex items-center gap-2"><Check className="w-3.5 h-3.5 text-emerald-400 shrink-0" /> Ad-free mobile experience</li>
-                      <li className="flex items-center gap-2"><Check className="w-3.5 h-3.5 text-emerald-400 shrink-0" /> Unlimited budget allocations</li>
-                      <li className="flex items-center gap-2"><Check className="w-3.5 h-3.5 text-emerald-400 shrink-0" /> Cloud sync & data backup</li>
-                    </ul>
-                  </div>
-                  <button
-                    onClick={() => setActiveTab('synthbudget')}
-                    className="w-full py-2.5 rounded-xl bg-emerald-400 hover:bg-emerald-300 text-xs font-black text-neutral-950 transition-all shadow-md shadow-emerald-400/20"
-                  >
-                    Explore App Pro
-                  </button>
-                </div>
-
-                {/* Micro-Services Tier */}
-                <div className="bg-neutral-900/50 border border-neutral-800 rounded-3xl p-6 flex flex-col justify-between space-y-6">
-                  <div className="space-y-4">
-                    <span className="text-xs font-bold text-neutral-400 uppercase">Micro Services</span>
-                    <div>
-                      <span className="text-3xl font-black text-white">$49 - $199</span>
-                    </div>
-                    <ul className="space-y-2 text-xs text-neutral-300">
-                      <li className="flex items-center gap-2"><Check className="w-3.5 h-3.5 text-emerald-400 shrink-0" /> Custom DNS & SSL setups</li>
-                      <li className="flex items-center gap-2"><Check className="w-3.5 h-3.5 text-emerald-400 shrink-0" /> React / Tailwind development</li>
-                      <li className="flex items-center gap-2"><Check className="w-3.5 h-3.5 text-emerald-400 shrink-0" /> Core Web Vitals speed tuning</li>
-                    </ul>
-                  </div>
-                  <button
-                    onClick={() => setActiveTab('contact')}
-                    className="w-full py-2.5 rounded-xl border border-neutral-700 bg-neutral-800 hover:bg-neutral-700 text-xs font-bold text-white transition-all"
-                  >
-                    Contact Support
-                  </button>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* VIEW: ABOUT US */}
-          {activeTab === 'about' && (
-            <div className="max-w-4xl mx-auto bg-neutral-900/50 border border-neutral-800 rounded-3xl p-8 sm:p-12 space-y-6">
-              <div className="space-y-2 border-b border-neutral-800 pb-4">
-                <h2 className="text-2xl font-black text-white">About Synth Labs Studio</h2>
-                <p className="text-xs text-neutral-400">
-                  Building streamlined digital products, client utilities, and high-performance applications.
-                </p>
-              </div>
-
-              <div className="space-y-4 text-xs sm:text-sm text-neutral-300 leading-relaxed">
-                <p>
-                  <strong>Synth Labs Studio</strong> is an independent software development and digital tools platform. We believe high-utility software shouldn't be hidden behind heavy paywalls or bogged down by slow server roundtrips.
-                </p>
-                <p>
-                  Our interactive suite runs 100% locally within modern browser engines, enabling instant prompt structuring, SEO previewing, and density analysis with complete privacy.
-                </p>
-              </div>
-
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 border-t border-neutral-800 text-xs">
-                <div className="bg-neutral-950 p-4 rounded-2xl border border-neutral-800">
-                  <div className="text-emerald-400 font-bold mb-1">Architecture</div>
-                  <div className="text-neutral-300">Vite, React, Tailwind CSS, Vercel Edge</div>
-                </div>
-                <div className="bg-neutral-950 p-4 rounded-2xl border border-neutral-800">
-                  <div className="text-cyan-400 font-bold mb-1">Primary Domain</div>
-                  <div className="text-neutral-300 font-mono">synthlabsstudio.com</div>
-                </div>
-                <div className="bg-neutral-950 p-4 rounded-2xl border border-neutral-800">
-                  <div className="text-indigo-400 font-bold mb-1">Core Mission</div>
-                  <div className="text-neutral-300">Practical utility over marketing hype</div>
-                </div>
-              </div>
-            </div>
-          )}
-
-          {/* VIEW: PRIVACY POLICY (COMPREHENSIVE FOR GOOGLE ADSENSE) */}
-          {activeTab === 'privacy' && (
-            <div className="max-w-4xl mx-auto bg-neutral-900/50 border border-neutral-800 rounded-3xl p-8 sm:p-12 space-y-6 text-xs text-neutral-300 leading-relaxed">
-              <div className="border-b border-neutral-800 pb-4">
-                <h2 className="text-2xl font-black text-white">Privacy Policy</h2>
-                <p className="text-neutral-500 text-[11px] font-mono mt-1">Effective Date: January 1, 2026 | Last Updated: 2026</p>
-              </div>
-
-              <div className="space-y-4">
-                <h3 className="text-sm font-bold text-neutral-100">1. Overview & Information Collection</h3>
-                <p>
-                  Synth Labs Studio (accessible from <strong>synthlabsstudio.com</strong>) respects the privacy of our visitors. This Privacy Policy outlines the types of information we collect and how we utilize and safeguard your data.
-                </p>
-
-                <h3 className="text-sm font-bold text-neutral-100">2. Client-Side Browser Utilities</h3>
-                <p>
-                  All interactive tools on Synth Labs Studio—including the Prompt Architect, SERP Previewer, Viral Hook Studio, Keyword Density Analyzer, and Schema Generator—operate <strong>entirely on the client side</strong> within your web browser. Any text or inputs you submit into these tools are processed in memory and are never transmitted to, logged in, or stored on external backend servers.
-                </p>
-
-                <h3 className="text-sm font-bold text-neutral-100">3. Cookies, Web Beacons & Third-Party Advertising</h3>
-                <p>
-                  We partner with third-party advertising networks, including <strong>Google AdSense</strong> and <strong>Google AdMob</strong>, to display contextual advertisements when you visit our website or use our mobile applications.
-                </p>
-                <p>
-                  Google uses cookies (such as the DoubleClick cookie) to serve ads to users based on their visits to synthlabsstudio.com and other websites on the internet. You may opt out of personalized advertising by visiting <span className="text-emerald-400">Google Ads Settings</span> (www.aboutads.info).
-                </p>
-
-                <h3 className="text-sm font-bold text-neutral-100">4. Direct Contact Information</h3>
-                <p>
-                  When you submit inquiries via our Contact Form, your name, email address, and message contents are utilized solely to respond to your specific request. We never sell, rent, or trade contact records to third-party data brokers.
-                </p>
-              </div>
-            </div>
-          )}
-
-          {/* VIEW: TERMS OF SERVICE (COMPREHENSIVE) */}
-          {activeTab === 'terms' && (
-            <div className="max-w-4xl mx-auto bg-neutral-900/50 border border-neutral-800 rounded-3xl p-8 sm:p-12 space-y-6 text-xs text-neutral-300 leading-relaxed">
-              <div className="border-b border-neutral-800 pb-4">
-                <h2 className="text-2xl font-black text-white">Terms of Service</h2>
-                <p className="text-neutral-500 text-[11px] font-mono mt-1">Effective Date: 2026</p>
-              </div>
-
-              <div className="space-y-4">
-                <h3 className="text-sm font-bold text-neutral-100">1. Acceptance of Terms</h3>
-                <p>
-                  By accessing and using <strong>synthlabsstudio.com</strong>, you agree to comply with and be bound by these Terms of Service. If you disagree with any part of these terms, please do not use our services.
-                </p>
-
-                <h3 className="text-sm font-bold text-neutral-100">2. Intellectual Property & Tool Output</h3>
-                <p>
-                  All code, templates, and output generated by our browser utilities (including prompts, schema markups, and viral hooks) are free for both commercial and personal use without attribution requirements. The brand name, interface design, and custom code of Synth Labs Studio remain the intellectual property of Synth Labs.
-                </p>
-
-                <h3 className="text-sm font-bold text-neutral-100">3. Disclaimer of Warranties</h3>
-                <p>
-                  The tools and calculators provided on this site are for informational and workflow-acceleration purposes only. We make no guarantees regarding search engine rank improvements, revenue projections, or third-party platform policies. All utilities are provided "as is" without warranty of any kind.
-                </p>
-              </div>
-            </div>
-          )}
-
-          {/* VIEW: CONTACT & SUPPORT */}
-          {activeTab === 'contact' && (
-            <div className="max-w-xl mx-auto bg-neutral-900/60 border border-neutral-800 rounded-3xl p-8 space-y-6">
-              <div>
-                <h2 className="text-2xl font-black text-white">Contact & Support</h2>
-                <p className="text-xs text-neutral-400 mt-1">
-                  Have a question about Synth Labs Studio or need assistance with custom engineering? Send a message below.
-                </p>
-              </div>
-
-              {contactSuccess ? (
-                <div className="p-4 bg-emerald-950/80 border border-emerald-800 rounded-2xl text-xs text-emerald-300 flex items-center gap-2">
-                  <CheckCircle2 className="w-5 h-5 text-emerald-400 shrink-0" />
-                  <span>Thank you! Your message has been received. We will get back to you shortly.</span>
-                </div>
-              ) : (
-                <form onSubmit={handleContactSubmit} className="space-y-4">
-                  <div>
-                    <label className="block text-xs font-semibold text-neutral-400 mb-1.5">Your Full Name</label>
-                    <input
-                      type="text"
-                      required
-                      value={contactName}
-                      onChange={(e) => setContactName(e.target.value)}
-                      className="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-4 py-2.5 text-xs text-neutral-200 focus:outline-none focus:border-emerald-400"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-semibold text-neutral-400 mb-1.5">Email Address</label>
-                    <input
-                      type="email"
-                      required
-                      value={contactEmail}
-                      onChange={(e) => setContactEmail(e.target.value)}
-                      className="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-4 py-2.5 text-xs text-neutral-200 focus:outline-none focus:border-emerald-400"
-                    />
-                  </div>
-                  <div>
-                    <label className="block text-xs font-semibold text-neutral-400 mb-1.5">Message / Inquiry Details</label>
-                    <textarea
-                      rows={4}
-                      required
-                      value={contactMsg}
-                      onChange={(e) => setContactMsg(e.target.value)}
-                      className="w-full bg-neutral-950 border border-neutral-800 rounded-xl px-4 py-2.5 text-xs text-neutral-200 focus:outline-none focus:border-emerald-400 resize-none leading-relaxed"
-                    />
-                  </div>
-                  <button
-                    type="submit"
-                    className="w-full bg-emerald-400 hover:bg-emerald-300 text-neutral-950 font-bold py-3 rounded-xl text-xs transition-all shadow-md shadow-emerald-400/20 flex items-center justify-center gap-2"
-                  >
-                    <Send className="w-4 h-4" /> Send Direct Message
-                  </button>
-                </form>
-              )}
-            </div>
-          )}
-
-        </main>
+      {/* 1. TOP LIVE STUDIO STATUS BANNER */}
+      <div className="bg-[#051c14] border-b border-emerald-800/40 px-4 py-1.5 text-xs text-center text-emerald-400 flex items-center justify-center gap-2">
+        <span className="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+        <span>Official Live Studio: <strong className="text-white">synthlabsstudio.com</strong> &bull; Zero-API Client Tools &amp; High-Performance Engineering</span>
       </div>
 
-      {/* Global Footer (Full Compliance Links) */}
-      <footer className="border-t border-neutral-800/80 bg-[#07090e] text-neutral-500 text-xs py-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="text-center md:text-left space-y-1">
-            <div className="font-bold text-neutral-300 text-sm flex items-center justify-center md:justify-start gap-2">
-              <span>⚡ SYNTH LABS STUDIO</span>
+      {/* 2. STICKY HEADER & NAVBAR */}
+      <header className="sticky top-0 z-40 bg-[#030712]/90 backdrop-blur-md border-b border-slate-800/80">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+          
+          {/* Brand Logo & Name */}
+          <a href="#" className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-teal-400 via-emerald-500 to-emerald-700 flex items-center justify-center shadow-lg shadow-emerald-950/40">
+              <Zap className="w-5 h-5 text-amber-300 fill-amber-300" />
             </div>
-            <p className="text-[11px] text-neutral-500">
-              © {new Date().getFullYear()} Synth Labs Studio (<span className="text-neutral-400">synthlabsstudio.com</span>). All rights reserved.
-            </p>
+            <div>
+              <span className="font-extrabold tracking-wider text-base text-white block leading-tight">SYNTH LABS</span>
+              <span className="text-[10px] tracking-widest text-emerald-400 font-bold block uppercase">Digital Agency &amp; Tools</span>
+            </div>
+          </a>
+
+          {/* Desktop Navigation Links */}
+          <nav className="hidden lg:flex items-center gap-6 text-xs text-slate-400 font-medium">
+            <a href="#overview" className="hover:text-emerald-400 transition-colors">Home</a>
+            <a href="#tools" className="hover:text-emerald-400 transition-colors">Tools Suite</a>
+            <a href="#guides" className="hover:text-emerald-400 transition-colors">Guides &amp; Docs</a>
+            <a href="#synthbudget" className="hover:text-emerald-400 transition-colors">SynthBudget App</a>
+            <a href="#services" className="hover:text-emerald-400 transition-colors">Services ($49-$199)</a>
+            <a href="#pricing" className="hover:text-emerald-400 transition-colors">Pricing &amp; Plans</a>
+            <button onClick={() => setActiveModal('about')} className="hover:text-emerald-400 transition-colors">About</button>
+            <a href="#contact" className="hover:text-emerald-400 transition-colors">Contact</a>
+          </nav>
+
+          {/* Right Action */}
+          <div className="hidden lg:flex items-center gap-3">
+            <a 
+              href="#pricing"
+              className="px-4 py-2 text-xs font-semibold text-emerald-300 bg-emerald-950/80 border border-emerald-500/30 rounded-lg hover:bg-emerald-900/60 transition-all shadow-sm"
+            >
+              Get Pro Access
+            </a>
           </div>
 
-          <div className="flex flex-wrap items-center justify-center gap-5 text-xs font-medium">
-            <button onClick={() => setActiveTab('home')} className="hover:text-emerald-400 transition-colors">Home</button>
-            <button onClick={() => setActiveTab('tools')} className="hover:text-emerald-400 transition-colors">Tools</button>
-            <button onClick={() => setActiveTab('posts')} className="hover:text-emerald-400 transition-colors">Guides</button>
-            <button onClick={() => setActiveTab('synthbudget')} className="hover:text-emerald-400 transition-colors">SynthBudget</button>
-            <button onClick={() => setActiveTab('services')} className="hover:text-emerald-400 transition-colors">Services</button>
-            <button onClick={() => setActiveTab('pricing')} className="hover:text-emerald-400 transition-colors">Pricing</button>
-            <button onClick={() => setActiveTab('about')} className="hover:text-emerald-400 transition-colors">About</button>
-            <button onClick={() => setActiveTab('privacy')} className="hover:text-emerald-400 transition-colors">Privacy Policy</button>
-            <button onClick={() => setActiveTab('terms')} className="hover:text-emerald-400 transition-colors">Terms of Service</button>
-            <button onClick={() => setActiveTab('contact')} className="hover:text-emerald-400 transition-colors">Contact</button>
+          {/* Mobile Drawer Button */}
+          <button 
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)} 
+            className="lg:hidden p-2 text-slate-400 hover:text-white rounded-lg focus:outline-none"
+            aria-label="Toggle Menu"
+          >
+            {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+          </button>
+        </div>
+
+        {/* Mobile Navigation Drawer */}
+        {mobileMenuOpen && (
+          <div className="lg:hidden bg-[#070d18] border-b border-slate-800 px-4 py-4 space-y-2.5">
+            <a 
+              href="#overview" 
+              onClick={() => setMobileMenuOpen(false)} 
+              className="flex items-center gap-2.5 text-xs text-slate-300 hover:text-emerald-400 py-1.5"
+            >
+              <Zap className="w-4 h-4 text-emerald-400" />
+              <span>⚡ Home Overview</span>
+            </a>
+            <a 
+              href="#tools" 
+              onClick={() => setMobileMenuOpen(false)} 
+              className="flex items-center gap-2.5 text-xs text-slate-300 hover:text-emerald-400 py-1.5"
+            >
+              <Code2 className="w-4 h-4 text-emerald-400" />
+              <span>🛠 Tools Suite (6 Client Utilities)</span>
+            </a>
+            <a 
+              href="#guides" 
+              onClick={() => setMobileMenuOpen(false)} 
+              className="flex items-center gap-2.5 text-xs text-slate-300 hover:text-emerald-400 py-1.5"
+            >
+              <BookOpen className="w-4 h-4 text-emerald-400" />
+              <span>📖 Guides &amp; Content Documentation</span>
+            </a>
+            <a 
+              href="#synthbudget" 
+              onClick={() => setMobileMenuOpen(false)} 
+              className="flex items-center gap-2.5 text-sm text-slate-300 hover:text-emerald-400 py-1.5"
+            >
+              <Smartphone className="w-4 h-4 text-emerald-400" />
+              <span>📱 SynthBudget Android App</span>
+            </a>
+            <a 
+              href="#services" 
+              onClick={() => setMobileMenuOpen(false)} 
+              className="flex items-center gap-2.5 text-xs text-slate-300 hover:text-emerald-400 py-1.5"
+            >
+              <Sparkles className="w-4 h-4 text-emerald-400" />
+              <span>💼 Agency &amp; Micro Services ($49 - $199)</span>
+            </a>
+            <a 
+              href="#pricing" 
+              onClick={() => setMobileMenuOpen(false)} 
+              className="flex items-center gap-2.5 text-xs text-slate-300 hover:text-emerald-400 py-1.5"
+            >
+              <Zap className="w-4 h-4 text-emerald-400" />
+              <span>💳 Pricing &amp; Plans</span>
+            </a>
+            <button 
+              onClick={() => { setMobileMenuOpen(false); setActiveModal('about'); }} 
+              className="w-full flex items-center gap-2.5 text-xs text-slate-300 hover:text-emerald-400 py-1.5 text-left"
+            >
+              <Info className="w-4 h-4 text-emerald-400" />
+              <span>ℹ️ About Synth Labs</span>
+            </button>
+            <a 
+              href="#contact" 
+              onClick={() => setMobileMenuOpen(false)} 
+              className="flex items-center gap-2.5 text-xs text-slate-300 hover:text-emerald-400 py-1.5"
+            >
+              <Mail className="w-4 h-4 text-emerald-400" />
+              <span>✉️ Contact &amp; Inquiries</span>
+            </a>
+          </div>
+        )}
+      </header>
+
+      {/* 3. AD AREA BANNER PLACEHOLDER (Google AdSense Responsive Unit) */}
+      <div className="max-w-5xl mx-auto px-4 pt-6">
+        <div className="bg-[#050b14] border border-dashed border-slate-800 rounded-xl p-3 text-center flex flex-col sm:flex-row items-center justify-between gap-2 text-[11px] text-slate-500">
+          <span className="px-2 py-0.5 rounded bg-slate-900 text-emerald-400 font-mono font-bold uppercase text-[9px]">AD AREA</span>
+          <span>Google AdSense Responsive Unit (Header Leaderboard 728x90 / Mobile 320x50)</span>
+          <span className="text-slate-600 font-mono">synthlabsstudio.com</span>
+        </div>
+      </div>
+
+      {/* 4. HERO SECTION */}
+      <section id="overview" className="relative pt-10 pb-12 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto text-center">
+        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-950/60 border border-emerald-500/30 text-emerald-400 text-xs font-semibold mb-6">
+          <Sparkles className="w-3.5 h-3.5" />
+          <span>Next-Gen AI &amp; SEO Studio</span>
+        </div>
+
+        <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-tight sm:leading-none">
+          Precision AI Tools <span className="text-emerald-400">&bull;</span> Web Development <span className="text-emerald-400">&bull;</span> Digital Growth
+        </h1>
+
+        <p className="mt-5 text-sm sm:text-base text-slate-400 max-w-2xl mx-auto leading-relaxed">
+          Practical browser-based micro-tools, custom digital products, and honest growth consulting—built for creators and teams who value clarity over hype.
+        </p>
+
+        <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
+          <a 
+            href="#tools"
+            className="px-6 py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs sm:text-sm transition-all shadow-lg shadow-emerald-500/20 flex items-center gap-2"
+          >
+            <span>Explore Tools Suite</span>
+            <ArrowRight className="w-4 h-4" />
+          </a>
+          <a 
+            href="#synthbudget"
+            className="px-6 py-3 rounded-xl bg-slate-900 border border-slate-800 hover:border-slate-700 text-slate-300 hover:text-white font-medium text-xs sm:text-sm transition-all flex items-center gap-2"
+          >
+            <Smartphone className="w-4 h-4 text-emerald-400" />
+            <span>Explore SynthBudget App</span>
+          </a>
+        </div>
+
+        {/* Feature Badges */}
+        <div className="mt-8 flex flex-wrap justify-center items-center gap-6 text-xs text-slate-400">
+          <div className="flex items-center gap-1.5">
+            <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+            <span>100% Client-Side Processing</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+            <span>0 API Charges</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <CheckCircle2 className="w-4 h-4 text-emerald-400" />
+            <span>Verified HTTPS on Vercel</span>
+          </div>
+        </div>
+      </section>
+
+      {/* 5. CODE CONSOLE MOCKUP */}
+      <div className="max-w-4xl mx-auto px-4 mb-16">
+        <div className="bg-[#070d18] border border-slate-800 rounded-2xl p-4 sm:p-6 shadow-2xl font-mono text-xs sm:text-sm text-slate-300">
+          <div className="flex items-center justify-between pb-3 border-b border-slate-800/80 mb-4 text-slate-500 text-[11px]">
+            <div className="flex items-center gap-2">
+              <span className="w-3 h-3 rounded-full bg-red-500/80 inline-block"></span>
+              <span className="w-3 h-3 rounded-full bg-amber-500/80 inline-block"></span>
+              <span className="w-3 h-3 rounded-full bg-emerald-500/80 inline-block"></span>
+            </div>
+            <span>live_tool_preview.sh</span>
+          </div>
+          <p className="text-slate-500">// Build a production-ready instruction</p>
+          <p className="mt-1">
+            <span className="text-indigo-400">const</span> <span className="text-teal-300">prompt</span> = <span className="text-emerald-400">engineer</span>({`{`}
+          </p>
+          <p className="pl-4">role: <span className="text-amber-300">"{promptPersona}"</span>,</p>
+          <p className="pl-4">task: <span className="text-amber-300">"{promptTask}"</span>,</p>
+          <p className="pl-4">tone: <span className="text-amber-300">"{promptTone}"</span>,</p>
+          <p className="pl-4">status: <span className="text-emerald-400">"Prompt ready — 0 API calls"</span></p>
+          <p>{`}`});</p>
+          <div className="mt-3 pt-3 border-t border-slate-800 flex justify-between text-emerald-400 text-xs">
+            <span>✓ Structured prompt generated locally</span>
+            <span className="text-slate-500 font-mono">0ms</span>
+          </div>
+        </div>
+      </div>
+
+      {/* 6. INTERACTIVE BROWSER SUITE (ALL 6 CLIENT UTILITIES) */}
+      <section id="tools" className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 border-t border-slate-800/80">
+        <div className="flex items-center gap-2.5 mb-2">
+          <Layers className="w-5 h-5 text-emerald-400" />
+          <h2 className="text-xl sm:text-2xl font-black text-white">Interactive Browser Suite</h2>
+        </div>
+        <p className="text-xs sm:text-sm text-slate-400 mb-6">Select a tool below. Everything runs instant client-side with 0 API cost.</p>
+
+        {/* Tool Tabs */}
+        <div className="flex flex-wrap gap-2 mb-6">
+          {[
+            { id: 'prompt', name: 'Prompt Architect' },
+            { id: 'serp', name: 'SERP Previewer' },
+            { id: 'hooks', name: 'Viral Hook Studio' },
+            { id: 'keyword', name: 'Keyword Density' },
+            { id: 'schema', name: 'Schema Generator' },
+            { id: 'roi', name: 'ROI Calculator' }
+          ].map((tool) => (
+            <button
+              key={tool.id}
+              onClick={() => setActiveTool(tool.id)}
+              className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
+                activeTool === tool.id
+                  ? 'bg-emerald-500 text-slate-950 font-bold shadow-md shadow-emerald-500/20'
+                  : 'bg-slate-900 border border-slate-800 text-slate-400 hover:text-white'
+              }`}
+            >
+              {tool.name}
+            </button>
+          ))}
+        </div>
+
+        {/* TOOL 1: PROMPT ARCHITECT */}
+        {activeTool === 'prompt' && (
+          <div className="bg-[#0b1322] border border-slate-800 rounded-2xl p-5 sm:p-7 space-y-5">
+            <div className="flex items-center justify-between border-b border-slate-800/80 pb-3">
+              <h3 className="text-base font-bold text-white">System Prompt Architect</h3>
+              <span className="px-2.5 py-0.5 rounded-full bg-emerald-950 border border-emerald-500/30 text-emerald-400 text-[10px] font-mono">Universal LLM</span>
+            </div>
+
+            <div className="space-y-3">
+              <div>
+                <label className="text-xs text-slate-400 block mb-1">Target AI Persona / Role</label>
+                <input 
+                  type="text" 
+                  value={promptPersona} 
+                  onChange={(e) => setPromptPersona(e.target.value)} 
+                  className="w-full bg-[#070d18] border border-slate-800 rounded-lg px-3 py-2 text-xs text-white focus:border-emerald-500 outline-none"
+                />
+              </div>
+              <div>
+                <label className="text-xs text-slate-400 block mb-1">Target Audience &amp; Intent</label>
+                <input 
+                  type="text" 
+                  value={promptAudience} 
+                  onChange={(e) => setPromptAudience(e.target.value)} 
+                  className="w-full bg-[#070d18] border border-slate-800 rounded-lg px-3 py-2 text-xs text-white focus:border-emerald-500 outline-none"
+                />
+              </div>
+              <div>
+                <label className="text-xs text-slate-400 block mb-1">Task Instructions &amp; Constraints</label>
+                <input 
+                  type="text" 
+                  value={promptTask} 
+                  onChange={(e) => setPromptTask(e.target.value)} 
+                  className="w-full bg-[#070d18] border border-slate-800 rounded-lg px-3 py-2 text-xs text-white focus:border-emerald-500 outline-none"
+                />
+              </div>
+              <div>
+                <label className="text-xs text-slate-400 block mb-1">Tone &amp; Formatting Style</label>
+                <input 
+                  type="text" 
+                  value={promptTone} 
+                  onChange={(e) => setPromptTone(e.target.value)} 
+                  className="w-full bg-[#070d18] border border-slate-800 rounded-lg px-3 py-2 text-xs text-white focus:border-emerald-500 outline-none"
+                />
+              </div>
+            </div>
+
+            {/* Compiled Output Block */}
+            <div className="mt-4 p-4 rounded-xl bg-[#040811] border border-slate-800 font-mono text-xs text-slate-300">
+              <div className="flex justify-between items-center mb-3 pb-2 border-b border-slate-800/80">
+                <span className="text-[10px] uppercase font-bold tracking-wider text-emerald-400">COMPILED OUTPUT</span>
+                <button 
+                  onClick={() => copyToClipboard(`Act as a ${promptPersona}.\n\nTarget Audience:\n${promptAudience}\n\nTask:\n${promptTask}\n\nTone & Style:\n${promptTone}\n\nOutput Guidelines:\n- Structure your response using markdown headings and bullet points.\n- Eliminate introductory conversational filler.`, 'prompt')}
+                  className="flex items-center gap-1.5 px-3 py-1 bg-slate-900 border border-slate-700 hover:border-emerald-500 text-emerald-400 rounded-lg text-xs transition-colors"
+                >
+                  <Copy className="w-3.5 h-3.5" />
+                  <span>{copiedIndex === 'prompt' ? 'Copied to Clipboard!' : 'Copy Prompt'}</span>
+                </button>
+              </div>
+              <p className="text-slate-300">Act as a <span className="text-emerald-400 font-semibold">{promptPersona}</span>.</p>
+              <p className="mt-2 text-slate-400">Target Audience:</p>
+              <p className="text-slate-200">{promptAudience}</p>
+              <p className="mt-2 text-slate-400">Task:</p>
+              <p className="text-slate-200">{promptTask}</p>
+              <p className="mt-2 text-slate-400">Tone &amp; Style:</p>
+              <p className="text-slate-200">{promptTone}</p>
+              <p className="mt-2 text-slate-400">Output Guidelines:</p>
+              <p className="text-slate-300">- Structure your response using markdown headings and bullet points.</p>
+              <p className="text-slate-300">- Eliminate introductory conversational filler.</p>
+              <div className="mt-4 pt-3 border-t border-slate-800 flex justify-between text-[11px] text-slate-500">
+                <span>Ready for GPT-4o, Claude 3.5 Sonnet, &amp; Gemini Pro</span>
+                <span className="text-emerald-400 font-semibold">Instant local compile</span>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* TOOL 2: SERP PREVIEWER */}
+        {activeTool === 'serp' && (
+          <div className="bg-[#0b1322] border border-slate-800 rounded-2xl p-5 sm:p-7 space-y-4">
+            <h3 className="text-base font-bold text-white">Google SERP Snippet Previewer</h3>
+            <div className="space-y-3">
+              <div>
+                <label className="text-xs text-slate-400 block mb-1">SEO Title Tag ({serpTitle.length} / 60 recommended chars)</label>
+                <input 
+                  type="text" 
+                  value={serpTitle} 
+                  onChange={(e) => setSerpTitle(e.target.value)} 
+                  className="w-full bg-[#070d18] border border-slate-800 rounded-lg px-3 py-2 text-xs text-white focus:border-emerald-500 outline-none"
+                />
+              </div>
+              <div>
+                <label className="text-xs text-slate-400 block mb-1">Target Canonical URL</label>
+                <input 
+                  type="text" 
+                  value={serpUrl} 
+                  onChange={(e) => setSerpUrl(e.target.value)} 
+                  className="w-full bg-[#070d18] border border-slate-800 rounded-lg px-3 py-2 text-xs text-white focus:border-emerald-500 outline-none"
+                />
+              </div>
+              <div>
+                <label className="text-xs text-slate-400 block mb-1">Meta Description ({serpDesc.length} / 160 recommended chars)</label>
+                <textarea 
+                  rows={2}
+                  value={serpDesc} 
+                  onChange={(e) => setSerpDesc(e.target.value)} 
+                  className="w-full bg-[#070d18] border border-slate-800 rounded-lg px-3 py-2 text-xs text-white focus:border-emerald-500 outline-none"
+                />
+              </div>
+            </div>
+
+            <div className="mt-4 p-4 rounded-xl bg-[#040811] border border-slate-800">
+              <span className="text-[11px] text-slate-500 block mb-2 font-mono">Google Desktop &amp; Mobile SERP Simulation</span>
+              <div className="text-xs text-slate-400 truncate">{serpUrl}</div>
+              <div className="text-base font-medium text-[#8ab4f8] hover:underline cursor-pointer truncate mt-0.5">{serpTitle}</div>
+              <div className="text-xs text-slate-300 mt-1 leading-relaxed">{serpDesc}</div>
+            </div>
+          </div>
+        )}
+
+        {/* TOOL 3: VIRAL HOOK STUDIO */}
+        {activeTool === 'hooks' && (
+          <div className="bg-[#0b1322] border border-slate-800 rounded-2xl p-5 sm:p-7 space-y-4">
+            <h3 className="text-base font-bold text-white">Viral Content Hook Generator</h3>
+            <div>
+              <label className="text-xs text-slate-400 block mb-1">Topic / Problem Statement</label>
+              <input 
+                type="text" 
+                value={hookTopic}
+                onChange={(e) => setHookTopic(e.target.value)}
+                className="w-full bg-[#070d18] border border-slate-800 rounded-lg px-3 py-2 text-xs text-white focus:border-emerald-500 outline-none"
+              />
+            </div>
+            <div>
+              <label className="text-xs text-slate-400 block mb-1">Psychological Hook Angle</label>
+              <select 
+                value={hookAngle} 
+                onChange={(e) => setHookAngle(e.target.value)}
+                className="w-full bg-[#070d18] border border-slate-800 rounded-lg px-3 py-2 text-xs text-white focus:border-emerald-500 outline-none"
+              >
+                <option value="Curiosity Gap">Curiosity Gap</option>
+                <option value="Contrarian">Contrarian / Hot Take</option>
+                <option value="Framework">Actionable Framework / Step-by-Step</option>
+              </select>
+            </div>
+            <button 
+              onClick={handleGenerateHooks}
+              className="w-full py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs transition-all flex items-center justify-center gap-2"
+            >
+              <Sparkles className="w-4 h-4" />
+              <span>Generate Fresh Angles</span>
+            </button>
+
+            <div className="mt-5 space-y-2">
+              <label className="text-[11px] uppercase tracking-wider text-slate-500 font-bold block">Generated Angles for Social &amp; Blogs</label>
+              {generatedHooks.map((hook, idx) => (
+                <div key={idx} className="bg-[#070d18] border border-slate-800/90 rounded-xl p-3 flex items-center justify-between gap-3 text-xs text-slate-300">
+                  <p className="leading-relaxed font-sans">"{hook}"</p>
+                  <button 
+                    onClick={() => copyToClipboard(hook, idx)}
+                    className="p-1.5 rounded-lg bg-slate-900 border border-slate-800 hover:text-emerald-400 shrink-0 text-slate-400 transition-colors"
+                  >
+                    {copiedIndex === idx ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4" />}
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {/* TOOL 4: KEYWORD DENSITY */}
+        {activeTool === 'keyword' && (
+          <div className="bg-[#0b1322] border border-slate-800 rounded-2xl p-5 sm:p-7 space-y-4">
+            <h3 className="text-base font-bold text-white">Client-Side Keyword Density Analyzer</h3>
+            <div>
+              <label className="text-xs text-slate-400 block mb-1">Target Keyword to Check</label>
+              <input 
+                type="text" 
+                value={kwTarget}
+                onChange={(e) => setKwTarget(e.target.value)}
+                className="w-full bg-[#070d18] border border-slate-800 rounded-lg px-3 py-2 text-xs text-white focus:border-emerald-500 outline-none"
+              />
+            </div>
+            <div>
+              <label className="text-xs text-slate-400 block mb-1">Content Body Text</label>
+              <textarea 
+                rows={4}
+                value={kwText}
+                onChange={(e) => setKwText(e.target.value)}
+                className="w-full bg-[#070d18] border border-slate-800 rounded-lg px-3 py-2 text-xs text-white focus:border-emerald-500 outline-none"
+              />
+            </div>
+            <div className="p-4 bg-[#070d18] border border-slate-800 rounded-xl flex items-center justify-around text-center">
+              <div>
+                <span className="text-[11px] text-slate-500 block">Occurrences</span>
+                <span className="text-xl font-bold text-emerald-400">{kwMetrics.count}</span>
+              </div>
+              <div>
+                <span className="text-[11px] text-slate-500 block">Total Words</span>
+                <span className="text-xl font-bold text-white">{kwMetrics.totalWords}</span>
+              </div>
+              <div>
+                <span className="text-[11px] text-slate-500 block">Density</span>
+                <span className="text-xl font-bold text-teal-300">{kwMetrics.density}%</span>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* TOOL 5: SCHEMA GENERATOR */}
+        {activeTool === 'schema' && (
+          <div className="bg-[#0b1322] border border-slate-800 rounded-2xl p-5 sm:p-7 space-y-4">
+            <h3 className="text-base font-bold text-white">JSON-LD Structured Data Generator</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label className="text-xs text-slate-400 block mb-1">Application Name</label>
+                <input 
+                  type="text" 
+                  value={appName}
+                  onChange={(e) => setAppName(e.target.value)}
+                  className="w-full bg-[#070d18] border border-slate-800 rounded-lg px-3 py-2 text-xs text-white focus:border-emerald-500 outline-none"
+                />
+              </div>
+              <div>
+                <label className="text-xs text-slate-400 block mb-1">Schema Type</label>
+                <select 
+                  value={schemaType}
+                  onChange={(e) => setSchemaType(e.target.value)}
+                  className="w-full bg-[#070d18] border border-slate-800 rounded-lg px-3 py-2 text-xs text-white focus:border-emerald-500 outline-none"
+                >
+                  <option value="WebApplication">WebApplication</option>
+                  <option value="SoftwareApplication">SoftwareApplication</option>
+                  <option value="Organization">Organization</option>
+                </select>
+              </div>
+            </div>
+            <div className="p-4 bg-[#070d18] border border-slate-800 rounded-xl font-mono text-xs text-emerald-400 relative">
+              <div className="flex justify-between items-center mb-2 text-slate-500 text-[11px]">
+                <span>Valid JSON-LD Schema</span>
+                <button 
+                  onClick={() => copyToClipboard(`{\n  "@context": "https://schema.org",\n  "@type": "${schemaType}",\n  "name": "${appName}",\n  "url": "https://www.synthlabsstudio.com",\n  "applicationCategory": "DeveloperApplication"\n}`, 'schema')}
+                  className="flex items-center gap-1 text-emerald-400 hover:text-emerald-300"
+                >
+                  <Copy className="w-3.5 h-3.5" />
+                  <span>{copiedIndex === 'schema' ? 'Copied!' : 'Copy Schema'}</span>
+                </button>
+              </div>
+              <pre className="overflow-x-auto whitespace-pre-wrap">{`{
+  "@context": "https://schema.org",
+  "@type": "${schemaType}",
+  "name": "${appName}",
+  "url": "https://www.synthlabsstudio.com",
+  "applicationCategory": "DeveloperApplication",
+  "offers": {
+    "@type": "Offer",
+    "price": "0.00",
+    "priceCurrency": "USD"
+  }
+}`}</pre>
+            </div>
+          </div>
+        )}
+
+        {/* TOOL 6: ROI CALCULATOR */}
+        {activeTool === 'roi' && (
+          <div className="bg-[#0b1322] border border-slate-800 rounded-2xl p-5 sm:p-7 space-y-4">
+            <h3 className="text-base font-bold text-white">Client-Side Automation ROI Calculator</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label className="text-xs text-slate-400 block mb-1">Hours Saved per Month</label>
+                <input 
+                  type="number" 
+                  value={hoursSaved}
+                  onChange={(e) => setHoursSaved(Number(e.target.value))}
+                  className="w-full bg-[#070d18] border border-slate-800 rounded-lg px-3 py-2 text-xs text-white focus:border-emerald-500 outline-none"
+                />
+              </div>
+              <div>
+                <label className="text-xs text-slate-400 block mb-1">Hourly Billing Rate ($)</label>
+                <input 
+                  type="number" 
+                  value={hourlyRate}
+                  onChange={(e) => setHourlyRate(Number(e.target.value))}
+                  className="w-full bg-[#070d18] border border-slate-800 rounded-lg px-3 py-2 text-xs text-white focus:border-emerald-500 outline-none"
+                />
+              </div>
+            </div>
+            <div className="p-5 bg-[#070d18] border border-slate-800 rounded-xl text-center">
+              <span className="text-xs text-slate-400 block">Estimated Annual Value Unlocked</span>
+              <span className="text-3xl sm:text-4xl font-black text-emerald-400 mt-1 block">
+                ${(hoursSaved * hourlyRate * 12).toLocaleString()}
+              </span>
+              <span className="text-[11px] text-slate-500 block mt-1">Based on client-side efficiency &amp; Zero-API architecture</span>
+            </div>
+          </div>
+        )}
+      </section>
+
+      {/* 7. SYNTHBUDGET ANDROID APP SHOWCASE */}
+      <section id="synthbudget" className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 border-t border-slate-800/80">
+        <div className="bg-[#0b1322] border border-slate-800 rounded-3xl p-6 sm:p-10">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-950 border border-emerald-500/30 text-emerald-400 text-[11px] font-semibold mb-4">
+            <span>Mobile Product in Active Testing</span>
+          </div>
+
+          <h2 className="text-2xl sm:text-3xl font-black text-white">SynthBudget Android App</h2>
+          <p className="mt-2 text-xs sm:text-sm text-slate-400 max-w-2xl leading-relaxed">
+            Intelligent expense tracker, cashflow analyzer, and budget forecaster engineered for privacy-conscious individuals and freelancers.
+          </p>
+
+          <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
+            <div className="space-y-3 text-xs text-slate-300">
+              <div className="flex items-start gap-2.5">
+                <Check className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                <span>Fast offline-first entry with instant local SQLite storage</span>
+              </div>
+              <div className="flex items-start gap-2.5">
+                <Check className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                <span>Automated cashflow breakdown and predictive month-end balance</span>
+              </div>
+              <div className="flex items-start gap-2.5">
+                <Check className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
+                <span>Optional ad-free subscription ($4.99/mo) with cloud backup</span>
+              </div>
+              <div className="pt-3">
+                <a 
+                  href="#pricing"
+                  className="px-5 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs inline-flex items-center gap-2 transition-all shadow-md shadow-emerald-500/20"
+                >
+                  <span>View Subscription Pricing</span>
+                  <ArrowRight className="w-4 h-4" />
+                </a>
+              </div>
+            </div>
+
+            {/* Google Play Closed Testing Card */}
+            <div className="bg-[#070d18] border border-slate-800 rounded-2xl p-6 text-center">
+              <div className="w-10 h-10 mx-auto rounded-xl bg-slate-900 border border-slate-700 flex items-center justify-center mb-3">
+                <Smartphone className="w-5 h-5 text-emerald-400" />
+              </div>
+              <h3 className="text-sm font-bold text-white">Google Play Store Closed Testing</h3>
+              <p className="mt-1.5 text-xs text-slate-400 leading-relaxed">
+                The app is undergoing closed tester group review. The direct Google Play Store download link will be published here upon completion of store compliance.
+              </p>
+              <div className="mt-4 inline-block px-3 py-1 rounded-full bg-emerald-950/60 border border-emerald-500/40 text-[10px] text-emerald-400 font-mono">
+                Target: Google Play Store Release
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 8. GUIDES, RESEARCH & TECHNICAL TUTORIALS (ADSENSE CONTENT DEPTH) */}
+      <section id="guides" className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 border-t border-slate-800/80">
+        <div>
+          <h2 className="text-xl sm:text-2xl font-black text-white">Guides, Research &amp; Technical Tutorials</h2>
+          <p className="text-xs sm:text-sm text-slate-400 mt-1">In-depth documentation covering algorithmic prompt design, Core Web Vitals, and scalable monetization architectures.</p>
+        </div>
+
+        <div className="mt-6 space-y-5">
+          {/* Article 1 */}
+          <div className="bg-[#0b1322] border border-slate-800 rounded-2xl p-6 hover:border-slate-700 transition-all">
+            <div className="flex items-center justify-between gap-2 mb-2">
+              <span className="px-2.5 py-0.5 rounded-full bg-emerald-950 border border-emerald-500/30 text-emerald-400 font-mono text-[10px] uppercase tracking-wider font-bold">
+                PROMPT ENGINEERING &bull; 6 MIN READ
+              </span>
+              <span className="text-[11px] text-slate-500 font-mono">Updated: 2026</span>
+            </div>
+            <h3 className="text-base font-bold text-white">How System Constraints and Persona Framing Prevent LLM Hallucinations</h3>
+            <p className="mt-2 text-xs text-slate-400 leading-relaxed">
+              Large language models (LLMs) operate probabilistically, generating next-token completions based on statistical weights. When prompts are vague or open-ended, the model fills context gaps with plausible-sounding inaccuracies.
+            </p>
+            <div className="mt-4 p-4 rounded-xl bg-[#070d18] border border-slate-800/90 text-xs text-slate-300 space-y-1.5">
+              <span className="text-[11px] font-bold text-slate-200 block mb-1">The 3 Structural Rules for Reliable Outputs:</span>
+              <p>&bull; <strong className="text-emerald-400">Negative Constraints:</strong> Explicitly forbid conversational fluff (e.g., "Do not include introductory commentary").</p>
+              <p>&bull; <strong className="text-emerald-400">Schema Definition:</strong> Force outputs into Markdown tables, bullet lists, or valid JSON payloads.</p>
+              <p>&bull; <strong className="text-emerald-400">Domain Calibration:</strong> Assign a specific senior persona to narrow the probability distribution of generated tokens.</p>
+            </div>
+          </div>
+
+          {/* Article 2 */}
+          <div className="bg-[#0b1322] border border-slate-800 rounded-2xl p-6 hover:border-slate-700 transition-all">
+            <div className="flex items-center justify-between gap-2 mb-2">
+              <span className="px-2.5 py-0.5 rounded-full bg-teal-950 border border-teal-500/30 text-teal-400 font-mono text-[10px] uppercase tracking-wider font-bold">
+                TECHNICAL SEO &bull; 5 MIN READ
+              </span>
+              <span className="text-[11px] text-slate-500 font-mono">Updated: 2026</span>
+            </div>
+            <h3 className="text-base font-bold text-white">Mastering Core Web Vitals for React Single Page Applications</h3>
+            <p className="mt-2 text-xs text-slate-400 leading-relaxed">
+              Single Page Applications (SPAs) built with React or Vite provide fast client interactions, but without careful asset loading, they risk failing Google's Largest Contentful Paint (LCP) and Cumulative Layout Shift (CLS) thresholds.
+            </p>
+            <div className="mt-4 p-4 rounded-xl bg-[#070d18] border border-slate-800/90 text-xs text-slate-300 space-y-1.5">
+              <span className="text-[11px] font-bold text-slate-200 block mb-1">Core Optimization Techniques Applied on Synth Labs:</span>
+              <p>&bull; <strong className="text-teal-300">Preconnecting Google Fonts:</strong> Eliminates font rendering delay during initial page load.</p>
+              <p>&bull; <strong className="text-teal-300">Zero-Dependency Client State:</strong> Reduces bundle payloads by executing parsing locally inside standard Web APIs.</p>
+              <p>&bull; <strong className="text-teal-300">Edge CDN Hosting:</strong> Utilizing Anycast Vercel Edge networks to deliver sub-100ms TTFB globally.</p>
+            </div>
+          </div>
+
+          {/* Article 3 */}
+          <div className="bg-[#0b1322] border border-slate-800 rounded-2xl p-6 hover:border-slate-700 transition-all">
+            <div className="flex items-center justify-between gap-2 mb-2">
+              <span className="px-2.5 py-0.5 rounded-full bg-indigo-950 border border-indigo-500/30 text-indigo-400 font-mono text-[10px] uppercase tracking-wider font-bold">
+                MONETIZATION &bull; 8 MIN READ
+              </span>
+              <span className="text-[11px] text-slate-500 font-mono">Updated: 2026</span>
+            </div>
+            <h3 className="text-base font-bold text-white">The Modern Hybrid Revenue Blueprint: AdSense + AdMob + Micro-Services</h3>
+            <p className="mt-2 text-xs text-slate-400 leading-relaxed">
+              Relying exclusively on client freelance work produces unpredictable revenue fluctuations. By integrating web-based utility traffic with Google AdSense, Android mobile applications powered by AdMob, and micro-service consulting packages, modern digital builders create resilient multi-stream income engines.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* 9. ON-DEMAND MICRO SERVICES ($49 - $199) */}
+      <section id="services" className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 border-t border-slate-800/80">
+        <div className="text-center mb-8">
+          <h2 className="text-2xl font-black text-white">On-Demand Micro Services</h2>
+          <p className="text-xs sm:text-sm text-slate-400 mt-1">Fixed-price engineering setups. No retainers, 24-hour delivery initiation.</p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {/* Service 1: $49 */}
+          <div className="bg-[#070d18] border border-slate-800 rounded-2xl p-6 flex flex-col justify-between hover:border-emerald-500/40 transition-all">
+            <div>
+              <div className="flex justify-between items-start mb-3">
+                <span className="text-xs uppercase font-bold tracking-wider text-emerald-400">Starter Setup</span>
+                <span className="text-2xl font-black text-white">$49</span>
+              </div>
+              <h3 className="text-base font-bold text-white mb-2">Custom DNS &amp; SSL Setup</h3>
+              <p className="text-xs text-slate-400 leading-relaxed">
+                Complete setup of custom domain routing, SSL certificate provisioning, Cloudflare/Vercel DNS management, and apex domain redirects.
+              </p>
+            </div>
+            <div className="mt-6 pt-4 border-t border-slate-800/80">
+              <a 
+                href={CHECKOUT_LINKS.dns_ssl} 
+                target="_blank" 
+                rel="noreferrer"
+                className="w-full py-2.5 rounded-xl bg-slate-900 border border-slate-700 hover:border-emerald-500/50 hover:bg-emerald-950/40 text-emerald-400 font-bold text-xs flex items-center justify-center gap-2 transition-all"
+              >
+                <span>Book Setup ($49)</span>
+                <ExternalLink className="w-3.5 h-3.5" />
+              </a>
+            </div>
+          </div>
+
+          {/* Service 2: $99 */}
+          <div className="bg-[#070d18] border border-slate-800 rounded-2xl p-6 flex flex-col justify-between hover:border-emerald-500/40 transition-all">
+            <div>
+              <div className="flex justify-between items-start mb-3">
+                <span className="text-xs uppercase font-bold tracking-wider text-emerald-400">Development</span>
+                <span className="text-2xl font-black text-white">$99</span>
+              </div>
+              <h3 className="text-base font-bold text-white mb-2">React / Tailwind UI Component</h3>
+              <p className="text-xs text-slate-400 leading-relaxed">
+                Custom client-side single-purpose utility tool, interactive calculator, or responsive frontend component built with React, Vite, and Tailwind CSS.
+              </p>
+            </div>
+            <div className="mt-6 pt-4 border-t border-slate-800/80">
+              <a 
+                href={CHECKOUT_LINKS.react_ui} 
+                target="_blank" 
+                rel="noreferrer"
+                className="w-full py-2.5 rounded-xl bg-slate-900 border border-slate-700 hover:border-emerald-500/50 hover:bg-emerald-950/40 text-emerald-400 font-bold text-xs flex items-center justify-center gap-2 transition-all"
+              >
+                <span>Order UI Component ($99)</span>
+                <ExternalLink className="w-3.5 h-3.5" />
+              </a>
+            </div>
+          </div>
+
+          {/* Service 3: $199 */}
+          <div className="bg-[#070d18] border border-slate-800 rounded-2xl p-6 flex flex-col justify-between hover:border-emerald-500/40 transition-all">
+            <div>
+              <div className="flex justify-between items-start mb-3">
+                <span className="text-xs uppercase font-bold tracking-wider text-emerald-400">Optimization</span>
+                <span className="text-2xl font-black text-white">$199</span>
+              </div>
+              <h3 className="text-base font-bold text-white mb-2">Core Web Vitals &amp; Speed Tuning</h3>
+              <p className="text-xs text-slate-400 leading-relaxed">
+                End-to-end performance audit, script debundling, zero-latency caching strategies, SEO metadata schema implementation, and 95+ PageSpeed optimization.
+              </p>
+            </div>
+            <div className="mt-6 pt-4 border-t border-slate-800/80">
+              <a 
+                href={CHECKOUT_LINKS.speed_tuning} 
+                target="_blank" 
+                rel="noreferrer"
+                className="w-full py-2.5 rounded-xl bg-slate-900 border border-slate-700 hover:border-emerald-500/50 hover:bg-emerald-950/40 text-emerald-400 font-bold text-xs flex items-center justify-center gap-2 transition-all"
+              >
+                <span>Order Speed Audit ($199)</span>
+                <ExternalLink className="w-3.5 h-3.5" />
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* 10. CLEAR & HONEST PRICING TIERS */}
+      <section id="pricing" className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16 border-t border-slate-800/80">
+        <div className="text-center mb-10">
+          <h2 className="text-2xl sm:text-3xl font-black text-white">Clear &amp; Honest Pricing Tiers</h2>
+          <p className="text-xs sm:text-sm text-slate-400 mt-1">Select free browser utilities, affordable micro-services, or app subscriptions.</p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+          
+          {/* Card 1: Starter Tools */}
+          <div className="bg-[#070d18] border border-slate-800 rounded-3xl p-6 sm:p-8 flex flex-col justify-between">
+            <div>
+              <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400">Starter Tools</span>
+              <div className="mt-3 flex items-baseline gap-1">
+                <span className="text-4xl font-black text-white">$0</span>
+                <span className="text-xs text-slate-400">/ lifetime</span>
+              </div>
+              <ul className="mt-6 space-y-3 text-xs text-slate-300">
+                <li className="flex items-center gap-2">
+                  <Check className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <span>All 6 browser tools</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <Check className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <span>No account creation needed</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <Check className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <span>Ad-supported experience</span>
+                </li>
+              </ul>
+            </div>
+            <a 
+              href="#tools"
+              className="mt-8 w-full py-3 rounded-xl bg-slate-900 border border-slate-800 hover:bg-slate-800 text-slate-300 hover:text-white text-xs font-semibold text-center transition-all block"
+            >
+              Use Free Tools
+            </a>
+          </div>
+
+          {/* Card 2: SynthBudget Pro (Featured Center Card) */}
+          <div className="bg-[#0b1322] border-2 border-emerald-500/80 rounded-3xl p-6 sm:p-8 relative shadow-2xl shadow-emerald-950/50 flex flex-col justify-between md:-translate-y-2">
+            <div className="absolute -top-3.5 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full bg-emerald-500 text-slate-950 font-bold text-[10px] uppercase tracking-wider">
+              Mobile App
+            </div>
+            <div>
+              <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-400">SynthBudget Pro</span>
+              <div className="mt-3 flex items-baseline gap-1">
+                <span className="text-4xl font-black text-white">$4.99</span>
+                <span className="text-xs text-slate-400">/ month</span>
+              </div>
+              <ul className="mt-6 space-y-3 text-xs text-slate-200">
+                <li className="flex items-center gap-2">
+                  <Check className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <span>Ad-free mobile experience</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <Check className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <span>Unlimited budget allocations</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <Check className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <span>Cloud sync &amp; data backup</span>
+                </li>
+              </ul>
+            </div>
+            <a 
+              href={CHECKOUT_LINKS.synthbudget_pro}
+              target="_blank"
+              rel="noreferrer"
+              className="mt-8 w-full py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 text-xs font-bold text-center transition-all shadow-lg shadow-emerald-500/20 block"
+            >
+              Explore App Pro
+            </a>
+          </div>
+
+          {/* Card 3: Micro Services */}
+          <div className="bg-[#070d18] border border-slate-800 rounded-3xl p-6 sm:p-8 flex flex-col justify-between">
+            <div>
+              <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400">Micro Services</span>
+              <div className="mt-3 flex items-baseline gap-1">
+                <span className="text-3xl font-black text-white">$49 - $199</span>
+              </div>
+              <ul className="mt-6 space-y-3 text-xs text-slate-300">
+                <li className="flex items-center gap-2">
+                  <Check className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <span>Custom DNS &amp; SSL setups</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <Check className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <span>React / Tailwind development</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <Check className="w-4 h-4 text-emerald-400 shrink-0" />
+                  <span>Core Web Vitals speed tuning</span>
+                </li>
+              </ul>
+            </div>
+            <a 
+              href="#services"
+              className="mt-8 w-full py-3 rounded-xl bg-slate-900 border border-slate-800 hover:bg-slate-800 text-slate-300 hover:text-white text-xs font-semibold text-center transition-all block"
+            >
+              View Service Tiers
+            </a>
+          </div>
+
+        </div>
+      </section>
+
+      {/* 11. CONTACT & SUPPORT SECTION */}
+      <section id="contact" className="max-w-2xl mx-auto px-4 sm:px-6 lg:px-8 py-12 border-t border-slate-800/80">
+        <div className="bg-[#0b1322] border border-slate-800 rounded-3xl p-6 sm:p-8">
+          <h2 className="text-xl font-bold text-white">Contact &amp; Support</h2>
+          <p className="text-xs text-slate-400 mt-1">Have a question about Synth Labs Studio or need assistance with custom engineering? Send a message below.</p>
+
+          {contactSent ? (
+            <div className="mt-6 p-4 rounded-xl bg-emerald-950/60 border border-emerald-500/40 text-center text-xs text-emerald-400 space-y-2">
+              <CheckCircle2 className="w-6 h-6 mx-auto text-emerald-400" />
+              <p className="font-bold">Opening your email client...</p>
+              <p className="text-slate-300">If your email client didn't open automatically, write directly to <strong className="text-white">sancares87@gmail.com</strong>.</p>
+            </div>
+          ) : (
+            <form onSubmit={handleContactSubmit} className="mt-6 space-y-4">
+              <div>
+                <label className="text-xs text-slate-400 block mb-1">Your Full Name</label>
+                <input 
+                  type="text" 
+                  required
+                  placeholder="e.g. Alex Morgan"
+                  value={contactName}
+                  onChange={(e) => setContactName(e.target.value)}
+                  className="w-full bg-[#070d18] border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-slate-600 focus:border-emerald-500 outline-none"
+                />
+              </div>
+              <div>
+                <label className="text-xs text-slate-400 block mb-1">Email Address</label>
+                <input 
+                  type="email" 
+                  required
+                  placeholder="name@example.com"
+                  value={contactEmail}
+                  onChange={(e) => setContactEmail(e.target.value)}
+                  className="w-full bg-[#070d18] border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-slate-600 focus:border-emerald-500 outline-none"
+                />
+              </div>
+              <div>
+                <label className="text-xs text-slate-400 block mb-1">Message / Inquiry Details</label>
+                <textarea 
+                  rows={4}
+                  required
+                  placeholder="Describe your technical requirements, question, or project scope..."
+                  value={contactMessage}
+                  onChange={(e) => setContactMessage(e.target.value)}
+                  className="w-full bg-[#070d18] border border-slate-800 rounded-xl px-3.5 py-2.5 text-xs text-white placeholder-slate-600 focus:border-emerald-500 outline-none"
+                />
+              </div>
+              <button 
+                type="submit"
+                className="w-full py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs flex items-center justify-center gap-2 transition-all shadow-md shadow-emerald-500/20"
+              >
+                <Send className="w-4 h-4" />
+                <span>Send Direct Message</span>
+              </button>
+            </form>
+          )}
+        </div>
+      </section>
+
+      {/* 12. FOOTER */}
+      <footer className="border-t border-slate-800/80 bg-[#02050b] py-12 text-xs text-slate-500">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+            <div className="flex items-center gap-2">
+              <Zap className="w-4 h-4 text-amber-400" />
+              <span className="font-bold text-slate-300">SYNTH LABS STUDIO</span>
+              <span>&copy; {new Date().getFullYear()} synthlabsstudio.com. All rights reserved.</span>
+            </div>
+            
+            {/* Compliance Footer Links */}
+            <div className="flex flex-wrap items-center justify-center gap-4 text-slate-400">
+              <a href="#overview" className="hover:text-emerald-400 transition-colors">Home</a>
+              <a href="#tools" className="hover:text-emerald-400 transition-colors">Tools</a>
+              <a href="#guides" className="hover:text-emerald-400 transition-colors">Guides</a>
+              <a href="#synthbudget" className="hover:text-emerald-400 transition-colors">SynthBudget</a>
+              <a href="#services" className="hover:text-emerald-400 transition-colors">Services</a>
+              <a href="#pricing" className="hover:text-emerald-400 transition-colors">Pricing</a>
+              <button onClick={() => setActiveModal('about')} className="hover:text-emerald-400 transition-colors">About</button>
+              <button onClick={() => setActiveModal('privacy')} className="hover:text-emerald-400 transition-colors">Privacy Policy</button>
+              <button onClick={() => setActiveModal('terms')} className="hover:text-emerald-400 transition-colors">Terms of Service</button>
+              <a href="#contact" className="hover:text-emerald-400 transition-colors">Contact</a>
+            </div>
+          </div>
+          
+          <div className="pt-4 border-t border-slate-900 text-center text-[11px] text-slate-600">
+            Payments securely processed by Lemon Squeezy (Merchant of Record). All client tools run locally in your browser.
           </div>
         </div>
       </footer>
 
+      {/* ========================================================================= */}
+      {/* 13. FULL NATURAL COMPLIANCE MODALS (ADSENSE & POLICY VERIFIED)            */}
+      {/* ========================================================================= */}
+
+      {/* ABOUT US MODAL */}
+      {activeModal === 'about' && (
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+          <div className="bg-[#0b1322] border border-slate-700 max-w-2xl w-full rounded-2xl p-6 sm:p-8 max-h-[90vh] overflow-y-auto text-xs sm:text-sm text-slate-300 space-y-4">
+            <div className="flex justify-between items-center pb-3 border-b border-slate-800">
+              <div className="flex items-center gap-2 text-emerald-400 font-bold text-base">
+                <Info className="w-5 h-5" />
+                <span>About Synth Labs Studio</span>
+              </div>
+              <button onClick={() => setActiveModal(null)} className="p-1 hover:text-white"><X className="w-5 h-5" /></button>
+            </div>
+            
+            <p><strong>Synth Labs Studio</strong> (<a href="https://www.synthlabsstudio.com" className="text-emerald-400 underline">synthlabsstudio.com</a>) is an independent engineering laboratory and digital consultancy founded to build high-performance, privacy-respecting browser utilities, developer tools, and lightweight SaaS architectures.</p>
+            
+            <h4 className="text-white font-bold text-sm pt-2">Our Philosophy: Zero-API, Maximum Speed</h4>
+            <p>Unlike conventional web utilities that harvest user prompts, keywords, or text inputs on centralized cloud databases, all 6 micro-tools inside the Synth Labs Interactive Suite execute <strong>100% client-side in the user's browser</strong>. This ensures zero latency, zero cloud API fees, and absolute user privacy.</p>
+            
+            <h4 className="text-white font-bold text-sm pt-2">Digital Engineering &amp; Consulting</h4>
+            <p>Beyond our open web utilities, Synth Labs provides direct micro-services—including custom domain DNS &amp; SSL hardening, bespoke React/Tailwind frontend interfaces, and Core Web Vitals optimization to help modern creators ship performant web software.</p>
+
+            <div className="pt-4 border-t border-slate-800 flex justify-end">
+              <button onClick={() => setActiveModal(null)} className="px-5 py-2 bg-emerald-500 text-slate-950 font-bold rounded-lg text-xs">Close</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* PRIVACY POLICY MODAL (AdSense & Cookie Compliant) */}
+      {activeModal === 'privacy' && (
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+          <div className="bg-[#0b1322] border border-slate-700 max-w-3xl w-full rounded-2xl p-6 sm:p-8 max-h-[90vh] overflow-y-auto text-xs sm:text-sm text-slate-300 space-y-4">
+            <div className="flex justify-between items-center pb-3 border-b border-slate-800">
+              <div className="flex items-center gap-2 text-emerald-400 font-bold text-base">
+                <Shield className="w-5 h-5" />
+                <span>Privacy Policy &amp; Cookie Disclosure</span>
+              </div>
+              <button onClick={() => setActiveModal(null)} className="p-1 hover:text-white"><X className="w-5 h-5" /></button>
+            </div>
+
+            <p className="text-[11px] text-slate-500">Last updated: {new Date().getFullYear()} &bull; Effective immediately</p>
+
+            <h4 className="text-white font-bold text-sm">1. Information We Do Not Collect</h4>
+            <p>Synth Labs Studio prioritizes data minimization. All browser tools (Prompt Architect, SERP Previewer, Hook Generator, Keyword Density Analyzer, Schema Generator, ROI Calculator) process computations locally in JavaScript. We do not store or transmit your inputted queries to any server.</p>
+
+            <h4 className="text-white font-bold text-sm">2. Google AdSense &amp; Third-Party Cookies</h4>
+            <p>We use Google AdSense and third-party advertising partners to display advertisements on our website. Google, as a third-party vendor, uses cookies to serve ads based on your prior visits to this website or other sites on the Internet.</p>
+            <ul className="list-disc pl-5 space-y-1 text-xs">
+              <li>Google's use of advertising cookies (including DoubleClick / DART cookies) enables it and its partners to serve ads to users based on their visits.</li>
+              <li>Users may opt out of personalized advertising by visiting <a href="https://adssettings.google.com" target="_blank" rel="noreferrer" className="text-emerald-400 underline">Google Ads Settings</a>.</li>
+            </ul>
+
+            <h4 className="text-white font-bold text-sm">3. Payments &amp; Merchant of Record</h4>
+            <p>Purchases of SynthBudget Pro and digital micro-services are securely handled by our merchant of record partner, <strong>Lemon Squeezy, LLC</strong>. When making a purchase, your billing details are processed directly by Lemon Squeezy under strict PCI-DSS standards.</p>
+
+            <h4 className="text-white font-bold text-sm">4. Contact Information</h4>
+            <p>For inquiries regarding this privacy policy or data requests, contact us directly at <a href="mailto:sancares87@gmail.com" className="text-emerald-400 underline">sancares87@gmail.com</a>.</p>
+
+            <div className="pt-4 border-t border-slate-800 flex justify-end">
+              <button onClick={() => setActiveModal(null)} className="px-5 py-2 bg-emerald-500 text-slate-950 font-bold rounded-lg text-xs">Accept &amp; Close</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* TERMS OF SERVICE MODAL */}
+      {activeModal === 'terms' && (
+        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+          <div className="bg-[#0b1322] border border-slate-700 max-w-3xl w-full rounded-2xl p-6 sm:p-8 max-h-[90vh] overflow-y-auto text-xs sm:text-sm text-slate-300 space-y-4">
+            <div className="flex justify-between items-center pb-3 border-b border-slate-800">
+              <div className="flex items-center gap-2 text-emerald-400 font-bold text-base">
+                <Scale className="w-5 h-5" />
+                <span>Terms of Service &amp; Copyright Notice</span>
+              </div>
+              <button onClick={() => setActiveModal(null)} className="p-1 hover:text-white"><X className="w-5 h-5" /></button>
+            </div>
+
+            <h4 className="text-white font-bold text-sm">1. Intellectual Property &amp; Copyright</h4>
+            <p>All brand assets, custom code architectures, logos, interfaces, and content published under <strong>synthlabsstudio.com</strong> are the copyrighted property of <strong>Synth Labs Studio &copy; {new Date().getFullYear()}</strong>. Unauthorized reproduction or malicious scraping of client utility architectures is strictly prohibited.</p>
+
+            <h4 className="text-white font-bold text-sm">2. Use of Free Client Utilities</h4>
+            <p>All browser-based utilities are provided "as-is" for personal and commercial productivity. While calculated metrics and schema generations follow official technical guidelines, Synth Labs Studio makes no warranties regarding external search engine algorithm shifts or ranking outcomes.</p>
+
+            <h4 className="text-white font-bold text-sm">3. Micro-Service Deliverables &amp; Refunds</h4>
+            <p>Micro-service packages ($49, $99, $199) represent dedicated developer hours and configuration audits. Work commences within 24 hours of order confirmation. Digital subscriptions to SynthBudget Pro ($4.99/mo) can be canceled at any time directly through the Lemon Squeezy billing portal.</p>
+
+            <div className="pt-4 border-t border-slate-800 flex justify-end">
+              <button onClick={() => setActiveModal(null)} className="px-5 py-2 bg-emerald-500 text-slate-950 font-bold rounded-lg text-xs">Close</button>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }
-
-
+```
