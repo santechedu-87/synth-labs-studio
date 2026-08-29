@@ -19,6 +19,7 @@ import {
   Smartphone, 
   CheckCircle2 
 } from 'lucide-react';
+import { Analytics } from '@vercel/analytics/react';
 
 export default function App() {
   // Mobile drawer state
@@ -1192,6 +1193,7 @@ export default function App() {
         </div>
       )}
 
+      <Analytics />
     </div>
   );
 }
