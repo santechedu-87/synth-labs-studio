@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About SynthLabs Studio — Engineering Laboratory</title>
+  <meta name="description" content="Learn about SynthLabs Studio (synthlabsstudio.com), founded by Sanajit to build high-performance, privacy-first web utilities and digital architectures." />
+  <link rel="canonical" href="https://www.synthlabsstudio.com/about.html" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #020617;
+      --surface: #0f172a;
+      --surface-elevated: #1e293b;
+      --border: #334155;
+      --border-subtle: #1e293b;
+      --text: #e2e8f0;
+      --text-muted: #94a3b8;
+      --text-bright: #ffffff;
+      --emerald: #10b981;
+      --emerald-glow: rgba(16, 185, 129, 0.15);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      line-height: 1.75;
+      padding: 32px 16px;
+    }
+    .container {
+      max-width: 840px;
+      margin: 0 auto;
+      background: var(--surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 20px;
+      padding: 40px 32px;
+    }
+    .nav-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 28px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 14px;
+      background: var(--surface-elevated);
+      color: #ffffff;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      text-decoration: none;
+    }
+    .btn:hover { background: #334155; }
+    .btn-emerald {
+      background: var(--emerald-glow);
+      border-color: rgba(16, 185, 129, 0.4);
+      color: var(--emerald);
+    }
+    .btn-emerald:hover { background: rgba(16, 185, 129, 0.25); }
+    h1 {
+      font-size: 30px;
+      font-weight: 800;
+      color: var(--text-bright);
+      margin-bottom: 6px;
+      letter-spacing: -0.02em;
+    }
+    .meta-tag {
+      font-size: 12px;
+      color: var(--emerald);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 24px;
+      display: inline-block;
+    }
+    h2 {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text-bright);
+      margin-top: 32px;
+      margin-bottom: 12px;
+      border-bottom: 1px solid var(--border-subtle);
+      padding-bottom: 8px;
+    }
+    p {
+      color: var(--text-muted);
+      font-size: 15px;
+      margin-bottom: 16px;
+    }
+    ul {
+      margin-left: 20px;
+      margin-bottom: 16px;
+      color: var(--text-muted);
+      font-size: 15px;
+    }
+    li { margin-bottom: 8px; }
+    strong { color: #f8fafc; }
+    a { color: var(--emerald); text-decoration: none; font-weight: 500; }
+    a:hover { text-decoration: underline; }
+    .footer-note {
+      margin-top: 36px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border-subtle);
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+    #toast {
+      display: none;
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--emerald);
+      color: #020617;
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="nav-bar">
+      <a href="https://www.synthlabsstudio.com" class="btn">&larr; Return to Studio</a>
+      <button class="btn btn-emerald" onclick="handleShare('About SynthLabs Studio')">
+        <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"></path></svg>
+        Share Profile
+      </button>
+    </div>
+
+    <h1>About SynthLabs Studio</h1>
+    <span class="meta-tag">Official Identity: synthlabsstudio.com • Engineering Laboratory</span>
+
+    <p>
+      <strong>SynthLabs Studio</strong> (<a href="https://www.synthlabsstudio.com">https://www.synthlabsstudio.com</a>) is an independent software laboratory and technical consultancy founded by <strong>Sanajit</strong>. The platform was established with a singular focus: delivering lightning-fast, zero-install web utilities and technical architectures that execute entirely within the client's browser environment.
+    </p>
+
+    <h2>Our Mission: Pure Client-Side Computation</h2>
+    <p>
+      Most conventional developer tools route user code snippets, prompts, metadata, and financial figures through centralized third-party servers. This model introduces latency, exposes proprietary inputs to cloud databases, and creates unnecessary infrastructure dependencies.
+    </p>
+    <p>
+      At <strong>SynthLabs Studio</strong> (<a href="https://www.synthlabsstudio.com">synthlabsstudio.com</a>), we construct utilities that run 100% locally in browser memory using native ECMAScript Web APIs. Your confidential prompts, schemas, and metrics never leave your device.
+    </p>
+
+    <h2>The Micro-Tool Ecosystem</h2>
+    <ul>
+      <li><strong>Prompt Architect:</strong> Implements deterministic prompting frameworks, negative constraints, and structured output formatting to minimize generative AI hallucinations.</li>
+      <li><strong>SERP Previewer:</strong> Computes proportional pixel widths for Google desktop (580px) and mobile (550px) search snippets to avoid search engine truncation.</li>
+      <li><strong>Keyword Density Analyzer:</strong> Evaluates lexical word frequencies and token ratios to ensure balanced keyword distribution between 1.0% and 2.5%.</li>
+      <li><strong>JSON-LD Schema Builder:</strong> Produces syntax-validated structured data markup adhering to schema.org vocabulary and RFC 8259 specifications.</li>
+      <li><strong>50/30/20 Financial Allocator:</strong> Formulates cash-flow ratios, capital reserves, and runway models in local memory.</li>
+    </ul>
+
+    <h2>Technical Micro-Services &amp; Architecture Consulting</h2>
+    <p>
+      Beyond our open web utilities, SynthLabs Studio provides dedicated developer consulting—including Core Web Vitals audits, custom React/Vite single-page frontends, and hardened domain DNS/SSL configurations for modern founders.
+    </p>
+
+    <div class="footer-note">
+      <p><strong>Platform:</strong> <a href="https://www.synthlabsstudio.com">https://www.synthlabsstudio.com</a></p>
+      <p><strong>Founder:</strong> Sanajit</p>
+      <p><strong>Inquiries &amp; Support:</strong> <a href="mailto:sancares87@gmail.com">sancares87@gmail.com</a></p>
+    </div>
+  </div>
+
+  <div id="toast">Link copied to clipboard!</div>
+
+  <script>
+    function handleShare(title) {
+      if (navigator.share) {
+        navigator.share({ title: title, url: window.location.href }).catch(() => {});
+      } else {
+        const el = document.createElement('textarea');
+        el.value = window.location.href;
+        document.body.appendChild(el);
+        el.select();
+        document.execCommand('copy');
+        document.body.removeChild(el);
+        const toast = document.getElementById('toast');
+        toast.style.display = 'block';
+        setTimeout(() => { toast.style.display = 'none'; }, 2500);
+      }
+    }
+  </script>
+</body>
+</html>
