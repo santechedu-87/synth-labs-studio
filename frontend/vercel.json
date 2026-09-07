@@ -1,11 +1,5 @@
 {
 "cleanUrls": true,
-"rewrites": [
-{
-"source": "/((?!about\.html|privacy\.html|terms\.html|guides\.html|ads\.txt|robots\.txt|sitemap\.xml|.\.[a-zA-Z0-9]+$).)",
-"destination": "/index.html"
-}
-],
 "headers": [
 {
 "source": "/(.*)",
@@ -30,3 +24,4 @@
 ]
 }
 ]
+}
