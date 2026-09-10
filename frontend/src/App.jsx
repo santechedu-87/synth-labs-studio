@@ -38,22 +38,23 @@ export default function App() {
   const [contactMessage, setContactMessage] = useState('');
   const [contactSent, setContactSent] = useState(false);
 
-  // =========================================================================
+    // =========================================================================
   // YOUR EXACT LEMON SQUEEZY CHECKOUT & OVERLAY URLS
   // =========================================================================
   const CHECKOUT_LINKS = {
-    synthbudget_pro: "https://synthlabsstudio.lemonsqueezy.com/checkout/buy/161f71bc-9e8f-4464-b1c5-b0a06fd8af90",
-    synthbudget_pro_embed: "https://synthlabsstudio.lemonsqueezy.com/checkout/buy/161f71bc-9e8f-4464-b1c5-b0a06fd8af90?embed=1",
+    synthbudget_pro: "https://synthlabsstudio.lemonsqueezy.com/checkout/buy/28b5fc71-8f5c-47be-9c2a-8a49afe6d758",
+    synthbudget_pro_embed: "https://synthlabsstudio.lemonsqueezy.com/checkout/buy/28b5fc71-8f5c-47be-9c2a-8a49afe6d758?embed=1",
     
-    dns_ssl: "https://synthlabsstudio.lemonsqueezy.com/checkout/buy/0d4acdc3-6fbc-453a-b1ca-0c6d52e46b6c",
-    dns_ssl_embed: "https://synthlabsstudio.lemonsqueezy.com/checkout/buy/0d4acdc3-6fbc-453a-b1ca-0c6d52e46b6c?embed=1",
+    dns_ssl: "https://synthlabsstudio.lemonsqueezy.com/checkout/buy/21a5bb06-ecbf-4c52-96a1-072c5820f5ea",
+    dns_ssl_embed: "https://synthlabsstudio.lemonsqueezy.com/checkout/buy/21a5bb06-ecbf-4c52-96a1-072c5820f5ea?embed=1",
     
-    react_ui: "https://synthlabsstudio.lemonsqueezy.com/checkout/buy/66086706-6113-4b7b-a3aa-e93784b8b87e",
-    react_ui_embed: "https://synthlabsstudio.lemonsqueezy.com/checkout/buy/66086706-6113-4b7b-a3aa-e93784b8b87e?embed=1",
+    react_ui: "https://synthlabsstudio.lemonsqueezy.com/checkout/buy/c26baa81-f055-4c43-b9ec-ef5863ae4599",
+    react_ui_embed: "https://synthlabsstudio.lemonsqueezy.com/checkout/buy/c26baa81-f055-4c43-b9ec-ef5863ae4599?embed=1",
     
-    speed_tuning: "https://synthlabsstudio.lemonsqueezy.com/checkout/buy/68d37212-8ddb-4fde-9e94-720f107832d5",
-    speed_tuning_embed: "https://synthlabsstudio.lemonsqueezy.com/checkout/buy/68d37212-8ddb-4fde-9e94-720f107832d5?embed=1"
+    speed_tuning: "https://synthlabsstudio.lemonsqueezy.com/checkout/buy/491b0432-f296-4030-ada5-83fa730da26e",
+    speed_tuning_embed: "https://synthlabsstudio.lemonsqueezy.com/checkout/buy/491b0432-f296-4030-ada5-83fa730da26e?embed=1"
   };
+
 
   // Initialize Lemon Squeezy Overlay library script
   useEffect(() => {
