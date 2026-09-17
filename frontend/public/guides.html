@@ -9,6 +9,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <!-- Google AdSense Publisher Tag -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1977225319753961" crossorigin="anonymous"></script>
   <style>
     :root {
       --bg: #020617;
@@ -282,6 +284,17 @@
       color: var(--text-muted);
     }
     tr:last-child td { border-bottom: none; }
+    .standalone-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--emerald);
+      font-weight: 700;
+      font-size: 13px;
+      text-decoration: none;
+      margin-top: 8px;
+    }
+    .standalone-link:hover { text-decoration: underline; }
     footer {
       background-color: var(--surface);
       border-top: 1px solid var(--border-subtle);
@@ -347,13 +360,13 @@
 
     <!-- Table of Contents -->
     <div class="toc-card">
-      <div class="toc-title">Table of Contents</div>
+      <div class="toc-title">Table of Contents &amp; Dedicated Papers</div>
       <ul class="toc-list">
-        <li><a href="#guide-llm-determinism">&rarr; 1. Deterministic System Prompts &amp; Negative Constraints</a></li>
-        <li><a href="#guide-web-vitals">&rarr; 2. Core Web Vitals in React Single Page Architectures</a></li>
-        <li><a href="#guide-json-rfc">&rarr; 3. RFC 8259 JSON Syntax &amp; Parser Compliance</a></li>
-        <li><a href="#guide-serp-geometry">&rarr; 4. Search Snippet Pixel Geometry &amp; Metadata Design</a></li>
-        <li><a href="#guide-budget-matrix">&rarr; 5. 50/30/20 Capital Allocation &amp; Liquid Runway Models</a></li>
+        <li><a href="/prompt-engineering-guide.html">&rarr; 1. Deterministic Prompt Architecture (1,320 words)</a></li>
+        <li><a href="/core-web-vitals-spa-guide.html">&rarr; 2. Core Web Vitals in React SPAs (1,340 words)</a></li>
+        <li><a href="/json-parser-specification-guide.html">&rarr; 3. RFC 8259 JSON Parser Conformance (1,280 words)</a></li>
+        <li><a href="/serp-snippet-pixel-geometry-guide.html">&rarr; 4. SERP Pixel Geometry &amp; Metadata (1,310 words)</a></li>
+        <li><a href="/financial-runway-modeling-guide.html">&rarr; 5. Runway Simulation &amp; Capital Allocation (1,360 words)</a></li>
       </ul>
     </div>
 
@@ -399,6 +412,7 @@
       <p>
         By treating system prompts as rigid configuration payloads rather than conversational messages, engineering teams can achieve reproducible outputs across enterprise API pipelines.
       </p>
+      <a href="/prompt-engineering-guide.html" class="standalone-link">&rarr; Read full standalone specification paper (1,320 words) &bull; Code &amp; Token Math</a>
     </article>
 
     <!-- ARTICLE 2: Core Web Vitals & React SPAs -->
@@ -466,6 +480,7 @@
           </tbody>
         </table>
       </div>
+      <a href="/core-web-vitals-spa-guide.html" class="standalone-link">&rarr; Read full standalone specification paper (1,340 words) &bull; INP &amp; LCP Systems Tuning</a>
     </article>
 
     <!-- ARTICLE 3: JSON Validation & RFC Standards -->
@@ -512,6 +527,7 @@
     };
   }
 }</code></pre>
+      <a href="/json-parser-specification-guide.html" class="standalone-link">&rarr; Read full standalone specification paper (1,280 words) &bull; Lexical AST &amp; Prototype Defense</a>
     </article>
 
     <!-- ARTICLE 4: SERP Pixel Constraints -->
@@ -573,6 +589,7 @@
 &lt;meta property="og:title" content="SynthLabs Studio — Developer Utilities & Software Laboratory" /&gt;
 &lt;meta property="og:description" content="Instant client-side developer micro-tools. 100% private in-browser computation." /&gt;
 &lt;meta property="og:image" content="https://www.synthlabsstudio.com/og-image.png" /&gt;</code></pre>
+      <a href="/serp-snippet-pixel-geometry-guide.html" class="standalone-link">&rarr; Read full standalone specification paper (1,310 words) &bull; Typography &amp; Canvas Sizing</a>
     </article>
 
     <!-- ARTICLE 5: 50/30/20 Financial Allocation -->
@@ -600,6 +617,7 @@
       <div class="callout">
         <strong>Security Standard:</strong> A baseline runway of 6 months provides adequate insulation against macroeconomic volatility and extended client payment cycles.
       </div>
+      <a href="/financial-runway-modeling-guide.html" class="standalone-link">&rarr; Read full standalone specification paper (1,360 words) &bull; Monte Carlo &amp; Dynamic Variance</a>
     </article>
 
   </main>
